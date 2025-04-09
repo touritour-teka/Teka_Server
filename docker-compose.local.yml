@@ -5,9 +5,13 @@ services:
     container_name: teka.local.db
     image: mysql:8.0
     environment:
-      POSTGRES_USER: "root"
-      POSTGRES_PASSWORD: "admin1234"
-      POSTGRES_DB: "teka"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "admin1234"
+      MYSQL_DB: "teka"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
     ports:
       - "3307:3306"
 
