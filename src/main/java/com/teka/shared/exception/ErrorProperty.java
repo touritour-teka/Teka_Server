@@ -1,4 +1,4 @@
-package com.teka.shared.error;
+package com.teka.shared.exception;
 
 import org.springframework.http.HttpStatus;
 

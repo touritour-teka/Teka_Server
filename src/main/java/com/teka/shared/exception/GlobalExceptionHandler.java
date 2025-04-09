@@ -1,4 +1,4 @@
-package com.teka.shared.error;
+package com.teka.shared.exception;
 
 import com.teka.shared.response.CommonResponse;
 import jakarta.validation.ConstraintViolationException;
