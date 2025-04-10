@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(e.getErrorProperty().getStatus())
-                .body(CommonResponse.error(e.getErrorProperty(), e.getMessage()));
+                .body(CommonResponse.error(e.getErrorProperty()));
     }
 
     @ExceptionHandler(Exception.class)
