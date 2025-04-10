@@ -1,6 +1,7 @@
-package com.teka.application.admin.port.in;
+package com.teka.application.admin.service;
 
 import com.teka.application.admin.exception.DuplicateAdminIdException;
+import com.teka.application.admin.port.in.SignUpAdminUseCase;
 import com.teka.application.admin.port.in.command.SignUpAdminCommand;
 import com.teka.application.admin.port.out.CheckAdminUsernamePort;
 import com.teka.application.admin.port.out.SaveAdminPort;
