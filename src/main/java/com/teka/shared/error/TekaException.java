@@ -1,4 +1,4 @@
-package com.teka.shared.exception;
+package com.teka.shared.error;
 
 import lombok.Getter;
 
