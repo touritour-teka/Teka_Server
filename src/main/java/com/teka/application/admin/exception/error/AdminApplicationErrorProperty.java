@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum AdminApplicationErrorProperty implements ErrorProperty {
 
-    DUPLICATE_ADMIN_ID(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다.");
+    ADMIN_ID_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다.");
 
     private final HttpStatus status;
     private final String message;
