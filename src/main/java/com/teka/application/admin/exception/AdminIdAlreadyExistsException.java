@@ -6,6 +6,6 @@ import com.teka.shared.error.TekaException;
 public class AdminIdAlreadyExistsException extends TekaException {
 
     public AdminIdAlreadyExistsException() {
-        super(AdminApplicationErrorProperty.DUPLICATE_ADMIN_ID);
+        super(AdminApplicationErrorProperty.ADMIN_ID_ALREADY_EXISTS);
     }
 }
