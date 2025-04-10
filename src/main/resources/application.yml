@@ -27,4 +27,8 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
 
-
+jwt:
+  refresh-expiration-time: 1296000000 # 15?
+  access-expiration-time: 3600000 # 1??
+  prefix: Bearer
+  secret-key: ${JWT_SECRET}
