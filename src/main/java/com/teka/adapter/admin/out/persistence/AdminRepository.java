@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AdminRepository extends JpaRepository<AdminJpaEntity, Integer> {
+public interface AdminRepository extends JpaRepository<AdminJpaEntity, Long> {
     boolean existsByUsername(String username);
     Optional<AdminJpaEntity> findByUsername(String username);
 }
