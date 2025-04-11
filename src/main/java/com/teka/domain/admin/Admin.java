@@ -1,10 +1,9 @@
 package com.teka.domain.admin;
 
-import lombok.AllArgsConstructor;
+import com.teka.shared.util.PasswordUtil;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class Admin {
 
     private final AdminId id;
@@ -12,4 +11,16 @@ public class Admin {
     private String username;
 
     private Password password;
+
+    public Admin(AdminId id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = new Password(PasswordUtil.encode(password));
+    }
+
+    public Admin(AdminId id, String username, Password password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
 }

@@ -9,8 +9,8 @@ public class PasswordUtil {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public boolean matches(String actual, String expected) {
-        return passwordEncoder.matches(actual, expected);
+    public boolean matches(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     public String encode(String password) {
