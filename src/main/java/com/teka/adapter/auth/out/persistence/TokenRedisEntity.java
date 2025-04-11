@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @AllArgsConstructor
-@RedisHash(timeToLive = 60 * 60 * 24 * 15)
+@RedisHash(value = "token", timeToLive = 60 * 60 * 24 * 15)
 public class TokenRedisEntity {
 
     @Id
