@@ -1,8 +1,6 @@
 package com.teka.shared.auth;
 
-import com.teka.application.auth.port.out.TokenProvider;
 import com.teka.application.auth.port.service.AuthFacade;
-import com.teka.domain.admin.Admin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class AuthenticationArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final AuthenticationExtractor authenticationExtractor;
-    private final TokenProvider tokenProvider;
     private final AuthFacade authFacade;
 
     @Override
