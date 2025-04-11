@@ -9,7 +9,7 @@ public class Admin {
 
     private final AdminId id;
 
-    private final String username;
+    private String username;
 
-    private final Password password;
+    private Password password;
 }
