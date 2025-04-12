@@ -4,14 +4,13 @@ import com.teka.adapter.auth.in.web.dto.request.LogInAdminRequest;
 import com.teka.adapter.auth.in.web.dto.response.TokenResponse;
 import com.teka.application.auth.port.dto.TokenDto;
 import com.teka.application.auth.port.in.LogInAdminUseCase;
+import com.teka.application.auth.port.in.RefreshTokenUseCase;
 import com.teka.shared.response.CommonResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final LogInAdminUseCase logInAdminUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
     @PostMapping
     public ResponseEntity<CommonResponse<TokenResponse>> logIn(@RequestBody @Valid LogInAdminRequest request) {
@@ -26,6 +26,18 @@ public class AuthController {
         TokenResponse response = TokenResponse.builder()
                 .accessToken(dto.accessToken())
                 .refreshToken(dto.refreshToken())
+                .build();
+
+        return ResponseEntity
+                .ok()
+                .body(CommonResponse.ok(response));
+    }
+
+    @PatchMapping
+    public ResponseEntity<CommonResponse<TokenResponse>> refreshToken(@RequestHeader("Refresh-Token") @NotBlank String refreshToken) {
+        TokenDto dto = refreshTokenUseCase.execute(refreshToken);
+        TokenResponse response = TokenResponse.builder()
+                .accessToken(dto.accessToken())
                 .build();
 
         return ResponseEntity
