@@ -1,8 +1,10 @@
 package com.teka.shared.auth;
 
 import com.teka.application.auth.port.service.AuthFacade;
+import com.teka.domain.admin.Admin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -25,7 +27,8 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String token = authenticationExtractor.extract(webRequest);
+        Admin admin = authFacade.getAdmin(token);
 
-        return authFacade.getAdmin(token);
+        return admin.getId();
     }
 }
