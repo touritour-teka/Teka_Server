@@ -5,6 +5,7 @@ import com.teka.application.admin.port.out.CheckAdminUsernamePort;
 import com.teka.application.admin.port.out.FindAdminPort;
 import com.teka.application.admin.port.out.SaveAdminPort;
 import com.teka.domain.admin.Admin;
+import com.teka.domain.admin.AdminId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,12 @@ public class AdminPersistenceAdapter implements SaveAdminPort, CheckAdminUsernam
     @Override
     public Optional<Admin> findByUsername(String username) {
         return adminRepository.findByUsername(username)
+                .map(AdminJpaEntity::toDomain);
+    }
+
+    @Override
+    public Optional<Admin> findById(AdminId id) {
+        return adminRepository.findById(id.value())
                 .map(AdminJpaEntity::toDomain);
     }
 

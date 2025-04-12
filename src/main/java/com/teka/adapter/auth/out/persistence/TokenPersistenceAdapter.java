@@ -1,5 +1,6 @@
 package com.teka.adapter.auth.out.persistence;
 
+import com.teka.application.auth.port.out.DeleteTokenPort;
 import com.teka.application.auth.port.out.FindTokenPort;
 import com.teka.application.auth.port.out.SaveTokenPort;
 import com.teka.domain.auth.Token;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class TokenPersistenceAdapter implements SaveTokenPort, FindTokenPort {
+public class TokenPersistenceAdapter implements SaveTokenPort, FindTokenPort, DeleteTokenPort {
 
     private final TokenRepository tokenRepository;
 
@@ -24,5 +25,10 @@ public class TokenPersistenceAdapter implements SaveTokenPort, FindTokenPort {
     public Optional<Token> findById(String id) {
         return tokenRepository.findById(id)
                 .map(TokenRedisEntity::toDomain);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        tokenRepository.deleteById(id);
     }
 }

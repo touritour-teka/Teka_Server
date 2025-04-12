@@ -4,12 +4,16 @@ import com.teka.adapter.auth.in.web.dto.request.LogInAdminRequest;
 import com.teka.adapter.auth.in.web.dto.response.TokenResponse;
 import com.teka.application.auth.port.dto.TokenDto;
 import com.teka.application.auth.port.in.LogInAdminUseCase;
+import com.teka.application.auth.port.in.LogOutAdminUseCase;
 import com.teka.application.auth.port.in.RefreshTokenUseCase;
+import com.teka.domain.admin.AdminId;
 import com.teka.shared.response.CommonResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ public class AuthController {
 
     private final LogInAdminUseCase logInAdminUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
+    private final LogOutAdminUseCase logOutAdminUseCase;
 
     @PostMapping
     public ResponseEntity<CommonResponse<TokenResponse>> logIn(@RequestBody @Valid LogInAdminRequest request) {
@@ -43,5 +48,13 @@ public class AuthController {
         return ResponseEntity
                 .ok()
                 .body(CommonResponse.ok(response));
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping
+    public void logOut(
+            @AuthenticationPrincipal AdminId adminId
+    ) {
+        logOutAdminUseCase.execute(adminId);
     }
 }
