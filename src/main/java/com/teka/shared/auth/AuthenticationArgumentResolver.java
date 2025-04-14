@@ -1,6 +1,6 @@
 package com.teka.shared.auth;
 
-import com.teka.application.auth.port.service.AuthFacade;
+import com.teka.application.auth.service.AuthFacade;
 import com.teka.domain.admin.Admin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;

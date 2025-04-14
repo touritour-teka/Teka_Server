@@ -1,4 +1,4 @@
-package com.teka.application.auth.port.service;
+package com.teka.application.auth.service;
 
 import com.teka.application.admin.exception.AdminNotFoundException;
 import com.teka.application.admin.port.out.FindAdminPort;
