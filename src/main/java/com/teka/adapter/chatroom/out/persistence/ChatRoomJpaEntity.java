@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -18,7 +19,7 @@ public class ChatRoomJpaEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String uuid;
+    private UUID uuid;
 
     @Column(nullable = false)
     private String name;
