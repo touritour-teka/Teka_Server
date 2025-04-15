@@ -1,4 +1,4 @@
-package com.teka.application.chatroom.port.service;
+package com.teka.application.chatroom.service;
 
 import com.teka.application.admin.exception.AdminNotFoundException;
 import com.teka.application.chatroom.port.in.CreateChatRoomUseCase;
