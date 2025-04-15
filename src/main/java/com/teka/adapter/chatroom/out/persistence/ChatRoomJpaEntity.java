@@ -3,6 +3,7 @@ package com.teka.adapter.chatroom.out.persistence;
 import com.teka.adapter.admin.out.persistence.AdminJpaEntity;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.chatroom.ChatRoomId;
+import com.teka.domain.chatroom.type.ChatRoomStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,17 +39,22 @@ public class ChatRoomJpaEntity {
     @Column(nullable = false)
     private Long maxParticipants;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private ChatRoomStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="admin_id")
     private AdminJpaEntity admin;
 
     @Builder
-    public ChatRoomJpaEntity(UUID uuid, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminJpaEntity admin) {
+    public ChatRoomJpaEntity(UUID uuid, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminJpaEntity admin, ChatRoomStatus status) {
         this.uuid = uuid;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.maxParticipants = maxParticipants;
+        this.status = status;
         this.admin = admin;
     }
 
@@ -60,6 +66,7 @@ public class ChatRoomJpaEntity {
                 .startDate(startDate)
                 .endDate(endDate)
                 .maxParticipants(maxParticipants)
+                .status(status)
                 .adminId(admin.toDomain().getId())
                 .build();
     }
@@ -71,6 +78,7 @@ public class ChatRoomJpaEntity {
                 .startDate(chatRoom.getStartDate())
                 .endDate(chatRoom.getEndDate())
                 .maxParticipants(chatRoom.getMaxParticipants())
+                .status(chatRoom.getStatus())
                 .admin(admin)
                 .build();
     }
