@@ -17,7 +17,7 @@ public class AuthenticationExtractor {
     public String extract(NativeWebRequest request) {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (authorizationHeader.isBlank()) {
+        if (authorizationHeader == null || authorizationHeader.isBlank()) {
             throw new EmptyTokenException();
         }
 
