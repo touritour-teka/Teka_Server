@@ -17,7 +17,6 @@ public class AdminController {
 
     private final SignUpAdminUseCase signUpAdminUseCase;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ResponseEntity<Long> signUp(@RequestBody @Valid SignUpAdminRequest request) {
         Long id = signUpAdminUseCase.execute(request.toCommand());
