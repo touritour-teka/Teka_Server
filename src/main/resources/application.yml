@@ -28,7 +28,7 @@ spring:
       password: ${REDIS_PASSWORD}
 
 jwt:
-  refresh-expiration-time: 1296000000 # 15?
-  access-expiration-time: 3600000 # 1??
+  refresh-expiration-time: 1296000000 # 15일
+  access-expiration-time: 3600000 # 1시간
   prefix: Bearer
   secret-key: ${JWT_SECRET}
