@@ -18,9 +18,9 @@ public class AdminPersistenceAdapter implements SaveAdminPort, CheckAdminUsernam
     private final AdminRepository adminRepository;
 
     @Override
-    public void save(Admin admin) {
+    public Long save(Admin admin) {
         AdminJpaEntity entity = AdminJpaEntity.from(admin);
-        adminRepository.save(entity);
+        return adminRepository.save(entity).getId();
     }
 
     @Override

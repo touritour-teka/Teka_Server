@@ -17,12 +17,12 @@ public class SignUpAdminService implements SignUpAdminUseCase {
     private final CheckAdminUsernamePort checkAdminUsernamePort;
 
     @Override
-    public void execute(SignUpAdminCommand command) {
+    public Long execute(SignUpAdminCommand command) {
         if (checkAdminUsernamePort.existsByUsername(command.username())) {
             throw new AdminIdAlreadyExistsException();
         }
 
         Admin admin = new Admin(null, command.username(), command.password());
-        saveAdminPort.save(admin);
+        return saveAdminPort.save(admin);
     }
 }
