@@ -11,7 +11,6 @@ import com.teka.shared.response.CommonResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +49,13 @@ public class AuthController {
                 .body(CommonResponse.ok(response));
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
-    public void logOut(
+    public ResponseEntity<Void> logOut(
             @AuthenticationPrincipal AdminId adminId
     ) {
         logOutAdminUseCase.execute(adminId);
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }
