@@ -1,7 +1,6 @@
 package com.teka.domain.chatroom;
 
 import com.teka.domain.admin.AdminId;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -25,10 +24,21 @@ public class ChatRoom {
 
     private final AdminId adminId;
 
-    @Builder
+    @Builder(builderMethodName = "basicBuilder")
     public ChatRoom(ChatRoomId id, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId) {
         this.id = id;
         this.uuid = UUID.randomUUID();
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.maxParticipants = maxParticipants;
+        this.adminId = adminId;
+    }
+
+    @Builder(builderMethodName = "fullBuilder")
+    public ChatRoom(ChatRoomId id, UUID uuid, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId) {
+        this.id = id;
+        this.uuid = uuid;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
