@@ -2,12 +2,12 @@ package com.teka.domain.user;
 
 import com.teka.domain.user.exception.PhoneNumberFormatMissMatchException;
 
-public record PhoneNumber(String phoneNumber) {
+public record PhoneNumber(String value) {
 
-    public PhoneNumber(String phoneNumber) {
-        if (phoneNumber.length() != 11) {
+    public PhoneNumber(String value) {
+        if (value.length() != 11) {
             throw new PhoneNumberFormatMissMatchException();
         }
-        this.phoneNumber = phoneNumber;
+        this.value = value;
     }
 }
