@@ -5,8 +5,10 @@ import com.teka.domain.admin.AdminId;
 import com.teka.domain.admin.Password;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "tbl_admin")
