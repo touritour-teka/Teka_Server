@@ -4,12 +4,14 @@ import com.teka.adapter.chatroom.in.web.dto.request.CreateChatRoomRequest;
 import com.teka.adapter.chatroom.in.web.dto.request.RegisterUserRequest;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomResponse;
 import com.teka.application.chatroom.port.in.CreateChatRoomUseCase;
+import com.teka.application.chatroom.port.in.DeleteUserUseCase;
 import com.teka.application.chatroom.port.in.QueryAllChatRoomUseCase;
 import com.teka.application.chatroom.port.in.RegisterUserUseCase;
 import com.teka.application.chatroom.port.in.command.RegisterUserCommand;
 import com.teka.domain.admin.AdminId;
 import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
+import com.teka.domain.user.UserId;
 import com.teka.shared.response.CommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class ChatRoomController {
     private final CreateChatRoomUseCase createChatRoomUseCase;
     private final QueryAllChatRoomUseCase queryAllChatRoomUseCase;
     private final RegisterUserUseCase registerUserUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
 
     @PostMapping
     public ResponseEntity<Long> create(
@@ -68,6 +71,18 @@ public class ChatRoomController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .build();
+    }
+
+    @DeleteMapping("/users")
+    public ResponseEntity<Void> deleteUser(
+            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @RequestBody List<Long> request
+    ) {
+        deleteUserUseCase.execute(request.stream().map(UserId::new).toList());
+
+        return ResponseEntity
+                .noContent()
                 .build();
     }
 }
