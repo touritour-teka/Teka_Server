@@ -10,14 +10,13 @@ import jakarta.validation.constraints.Size;
 public record RegisterUserRequest(
 
         @NotBlank(message = "필수값입니다.")
-        @Size(min = 11, max = 11)
+        @Size(min = 11, max = 11, message = "11자여야합니다.")
         String phoneNumber,
 
         @NotBlank(message = "필수값입니다.")
         @Size(max = 255, message = "255자 이하여야 합니다.")
         @Email(message = "이메일 형식이여야 합니다.")
         String email,
-
 
         @NotNull(message = "필수값입니다.")
         UserType type
