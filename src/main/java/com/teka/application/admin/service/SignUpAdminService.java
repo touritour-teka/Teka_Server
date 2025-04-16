@@ -6,7 +6,6 @@ import com.teka.application.admin.port.in.command.SignUpAdminCommand;
 import com.teka.application.admin.port.out.CheckAdminUsernamePort;
 import com.teka.application.admin.port.out.SaveAdminPort;
 import com.teka.domain.admin.Admin;
-import com.teka.domain.admin.Password;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
