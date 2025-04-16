@@ -26,7 +26,6 @@ public class LoginAdminService implements LogInAdminUseCase {
         try {
             admin = findAdminPort.findByUsername(command.username())
                     .orElseThrow(AdminNotFoundException::new);
-            System.out.println(admin.getPassword());
             validatePassword(command.password(), admin.getPassword());
         } catch (AdminNotFoundException | PasswordMismatchException e) {
             throw new WrongLoginException();
