@@ -1,6 +1,7 @@
 package com.teka.adapter.chatroom.out.persistence;
 
 import com.teka.adapter.admin.out.persistence.AdminJpaEntity;
+import com.teka.adapter.user.out.persistence.UserJpaEntity;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
@@ -11,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -46,6 +49,9 @@ public class ChatRoomJpaEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="admin_id")
     private AdminJpaEntity admin;
+
+    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
+    private final List<UserJpaEntity> userList = new ArrayList<>();
 
     @Builder
     public ChatRoomJpaEntity(UUID uuid, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminJpaEntity admin, ChatRoomStatus status) {
