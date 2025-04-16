@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -76,6 +77,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(GlobalErrorProperty.BAD_REQUEST.getStatus())
                 .body(CommonResponse.error(GlobalErrorProperty.BAD_REQUEST, errorMap));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<CommonResponse<String>> handleNoResourceFoundException(NoResourceFoundException e) {
+        logHandledException(e);
+
+        return ResponseEntity
+                .status(GlobalErrorProperty.NOT_FOUND.getStatus())
+                .body(CommonResponse.error(GlobalErrorProperty.NOT_FOUND, e.getMessage()));
     }
 
     @ExceptionHandler(TekaException.class)
