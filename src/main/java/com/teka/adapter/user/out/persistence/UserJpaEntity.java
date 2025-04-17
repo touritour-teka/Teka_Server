@@ -57,6 +57,10 @@ public class UserJpaEntity {
         this.chatRoom = chatRoom;
     }
 
+    public void changeType(UserType type) {
+        this.type = type;
+    }
+
     public static UserJpaEntity from(User user, ChatRoomJpaEntity chatRoom) {
         return UserJpaEntity.builder()
                 .username(user.getUsername())

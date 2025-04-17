@@ -2,20 +2,18 @@ package com.teka.adapter.user.out.persistence;
 
 import com.teka.adapter.chatroom.out.persistence.ChatRoomJpaEntity;
 import com.teka.adapter.chatroom.out.persistence.ChatRoomRepository;
-import com.teka.application.user.port.out.CheckUserEmailPort;
-import com.teka.application.user.port.out.CheckUserPhoneNumberPort;
-import com.teka.application.user.port.out.DeleteUserPort;
-import com.teka.application.user.port.out.SaveUserPort;
+import com.teka.application.user.port.out.*;
 import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
+import com.teka.domain.user.type.UserType;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumberPort, CheckUserEmailPort, DeleteUserPort {
+public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumberPort, CheckUserEmailPort, DeleteUserPort, ChangeUserPort {
 
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -44,5 +42,13 @@ public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumbe
     @Override
     public void deleteByUserId(UserId userId) {
         userRepository.deleteById(userId.value());
+    }
+
+    @Override
+    public void changeUserType(UserId userId, UserType type) {
+        UserJpaEntity user = userRepository.findById(userId.value())
+                .orElseThrow(EntityNotFoundException::new);
+        user.changeType(type);
+        userRepository.save(user);
     }
 }

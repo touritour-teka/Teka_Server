@@ -1,12 +1,10 @@
 package com.teka.adapter.chatroom.in.web;
 
+import com.teka.adapter.chatroom.in.web.dto.request.ChangeUserTypeRequest;
 import com.teka.adapter.chatroom.in.web.dto.request.CreateChatRoomRequest;
 import com.teka.adapter.chatroom.in.web.dto.request.RegisterUserRequest;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomResponse;
-import com.teka.application.chatroom.port.in.CreateChatRoomUseCase;
-import com.teka.application.chatroom.port.in.DeleteUserUseCase;
-import com.teka.application.chatroom.port.in.QueryAllChatRoomUseCase;
-import com.teka.application.chatroom.port.in.RegisterUserUseCase;
+import com.teka.application.chatroom.port.in.*;
 import com.teka.application.chatroom.port.in.command.RegisterUserCommand;
 import com.teka.domain.admin.AdminId;
 import com.teka.domain.chatroom.ChatRoomId;
@@ -32,6 +30,7 @@ public class ChatRoomController {
     private final QueryAllChatRoomUseCase queryAllChatRoomUseCase;
     private final RegisterUserUseCase registerUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
+    private final ChangeUserTypeUseCase changeUserTypeUseCase;
 
     @PostMapping
     public ResponseEntity<Long> create(
@@ -80,6 +79,18 @@ public class ChatRoomController {
             @RequestBody List<Long> request
     ) {
         deleteUserUseCase.execute(request.stream().map(UserId::new).toList());
+
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @PatchMapping("/users")
+    public ResponseEntity<Void> changeUserType(
+            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @RequestBody @Valid List<ChangeUserTypeRequest> request
+    ) {
+        changeUserTypeUseCase.execute(request.stream().map(ChangeUserTypeRequest::toCommand).toList());
 
         return ResponseEntity
                 .noContent()
