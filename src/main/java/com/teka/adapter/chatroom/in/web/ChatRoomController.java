@@ -4,6 +4,7 @@ import com.teka.adapter.chatroom.in.web.dto.request.ChangeUserTypeRequest;
 import com.teka.adapter.chatroom.in.web.dto.request.CreateChatRoomRequest;
 import com.teka.adapter.chatroom.in.web.dto.request.RegisterUserRequest;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomResponse;
+import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomSimpleResponse;
 import com.teka.application.chatroom.port.in.*;
 import com.teka.application.chatroom.port.in.command.RegisterUserCommand;
 import com.teka.domain.admin.AdminId;
@@ -28,6 +29,7 @@ public class ChatRoomController {
 
     private final CreateChatRoomUseCase createChatRoomUseCase;
     private final QueryAllChatRoomUseCase queryAllChatRoomUseCase;
+    private final QueryChatRoomUseCase queryChatRoomUseCase;
     private final RegisterUserUseCase registerUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final ChangeUserTypeUseCase changeUserTypeUseCase;
@@ -44,13 +46,25 @@ public class ChatRoomController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<ChatRoomResponse>>> queryAll(
+    public ResponseEntity<CommonResponse<List<ChatRoomSimpleResponse>>> queryAll(
             @AuthenticationPrincipal AdminId ignoredAdminId,
             @RequestParam(name = "status") List<ChatRoomStatus> statusList
     ) {
-        List<ChatRoomResponse> response = queryAllChatRoomUseCase.execute(statusList).stream()
-                .map(ChatRoomResponse::from)
+        List<ChatRoomSimpleResponse> response = queryAllChatRoomUseCase.execute(statusList).stream()
+                .map(ChatRoomSimpleResponse::from)
                 .toList();
+
+        return ResponseEntity
+                .ok()
+                .body(CommonResponse.ok(response));
+    }
+
+    @GetMapping("/{chatRoomId}")
+    public ResponseEntity<CommonResponse<ChatRoomResponse>> queryById(
+            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @PathVariable(name = "chatRoomId") Long chatRoomId
+    ) {
+        ChatRoomResponse response = ChatRoomResponse.from(queryChatRoomUseCase.execute(new ChatRoomId(chatRoomId)));
 
         return ResponseEntity
                 .ok()

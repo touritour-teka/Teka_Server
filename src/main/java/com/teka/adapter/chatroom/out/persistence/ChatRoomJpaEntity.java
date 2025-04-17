@@ -72,8 +72,9 @@ public class ChatRoomJpaEntity {
                 .startDate(startDate)
                 .endDate(endDate)
                 .maxParticipants(maxParticipants)
-                .status(status)
                 .adminId(admin.toDomain().getId())
+                .status(status)
+                .userList(userList.stream().map(UserJpaEntity::toDomain).toList())
                 .build();
     }
 

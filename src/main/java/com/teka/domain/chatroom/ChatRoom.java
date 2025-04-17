@@ -2,10 +2,12 @@ package com.teka.domain.chatroom;
 
 import com.teka.domain.admin.AdminId;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
+import com.teka.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -27,7 +29,9 @@ public class ChatRoom {
 
     private ChatRoomStatus status;
 
-    @Builder(builderMethodName = "basicBuilder")
+    private List<User> userList;
+
+    @Builder(builderClassName = "ChatRoomBasicBuilder", builderMethodName = "basicBuilder")
     public ChatRoom(ChatRoomId id, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId) {
         this.id = id;
         this.uuid = UUID.randomUUID();
@@ -39,8 +43,8 @@ public class ChatRoom {
         this.status = ChatRoomStatus.OPEN;
     }
 
-    @Builder(builderMethodName = "fullBuilder")
-    public ChatRoom(ChatRoomId id, UUID uuid, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId, ChatRoomStatus status) {
+    @Builder(builderClassName = "ChatRoomFullBuilder", builderMethodName = "fullBuilder")
+    public ChatRoom(ChatRoomId id, UUID uuid, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId, ChatRoomStatus status, List<User> userList) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
@@ -49,5 +53,6 @@ public class ChatRoom {
         this.maxParticipants = maxParticipants;
         this.adminId = adminId;
         this.status = status;
+        this.userList = userList;
     }
 }
