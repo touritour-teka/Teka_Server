@@ -30,6 +30,7 @@ public class ChatRoomController {
     private final CreateChatRoomUseCase createChatRoomUseCase;
     private final QueryAllChatRoomUseCase queryAllChatRoomUseCase;
     private final QueryChatRoomUseCase queryChatRoomUseCase;
+    private final CloseChatRoomUseCase closeChatRoomUseCase;
     private final RegisterUserUseCase registerUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final ChangeUserTypeUseCase changeUserTypeUseCase;
@@ -53,7 +54,6 @@ public class ChatRoomController {
         List<ChatRoomSimpleResponse> response = queryAllChatRoomUseCase.execute(statusList).stream()
                 .map(ChatRoomSimpleResponse::from)
                 .toList();
-
         return ResponseEntity
                 .ok()
                 .body(CommonResponse.ok(response));
@@ -65,10 +65,20 @@ public class ChatRoomController {
             @PathVariable(name = "chatRoomId") Long chatRoomId
     ) {
         ChatRoomResponse response = ChatRoomResponse.from(queryChatRoomUseCase.execute(new ChatRoomId(chatRoomId)));
-
         return ResponseEntity
                 .ok()
                 .body(CommonResponse.ok(response));
+    }
+
+    @PatchMapping("/{chatRoomId}/close")
+    public ResponseEntity<Void> closeChatRoom(
+            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @PathVariable(name = "chatRoomId") Long chatRoomId
+    ) {
+        closeChatRoomUseCase.execute(new ChatRoomId(chatRoomId));
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
     @PostMapping("/{chatRoomId}/users")
@@ -81,7 +91,6 @@ public class ChatRoomController {
                 .map(RegisterUserRequest::toCommand)
                 .toList();
         registerUserUseCase.execute(commandList, new ChatRoomId(chatRoomId));
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
@@ -93,7 +102,6 @@ public class ChatRoomController {
             @RequestBody List<Long> request
     ) {
         deleteUserUseCase.execute(request.stream().map(UserId::new).toList());
-
         return ResponseEntity
                 .noContent()
                 .build();
@@ -105,7 +113,6 @@ public class ChatRoomController {
             @RequestBody @Valid List<ChangeUserTypeRequest> request
     ) {
         changeUserTypeUseCase.execute(request.stream().map(ChangeUserTypeRequest::toCommand).toList());
-
         return ResponseEntity
                 .noContent()
                 .build();
