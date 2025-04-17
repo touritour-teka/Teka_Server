@@ -68,6 +68,10 @@ public class ChatRoomJpaEntity {
         this.status = ChatRoomStatus.CLOSED;
     }
 
+    public void open() {
+        this.status = ChatRoomStatus.OPEN;
+    }
+
     public ChatRoom toDomain() {
         return ChatRoom.fullBuilder()
                 .id(new ChatRoomId(id))

@@ -37,21 +37,18 @@ public class RegisterUserService implements RegisterUserUseCase {
                 if (checkUserEmailPort.existsByEmail(command.email(), chatRoomId)) {
                     throw new EmailAlreadyExistsException();
                 }
-            } catch(EntityNotFoundException e) {
-                throw new ChatRoomNotFoundException();
-            }
 
-            User user = User.builder()
-                    .id(null)
-                    .phoneNumber(new PhoneNumber(command.phoneNumber()))
-                    .email(new Email(command.email()))
-                    .type(command.type())
-                    .chatRoomId(chatRoomId)
-                    .build();
-            try {
+                User user = User.builder()
+                        .id(null)
+                        .phoneNumber(new PhoneNumber(command.phoneNumber()))
+                        .email(new Email(command.email()))
+                        .type(command.type())
+                        .chatRoomId(chatRoomId)
+                        .build();
                 saveUserPort.save(user);
-            } catch(EntityNotFoundException e) {
+            } catch (EntityNotFoundException e) {
                 throw new ChatRoomNotFoundException();
+
             }
         }
     }

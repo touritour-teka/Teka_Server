@@ -34,6 +34,7 @@ public class ChatRoomController {
     private final RegisterUserUseCase registerUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final ChangeUserTypeUseCase changeUserTypeUseCase;
+    private final OpenChatRoomUseCase openChatRoomUseCase;
 
     @PostMapping
     public ResponseEntity<Long> create(
@@ -68,6 +69,17 @@ public class ChatRoomController {
         return ResponseEntity
                 .ok()
                 .body(CommonResponse.ok(response));
+    }
+
+    @PatchMapping("/{chatRoomId}/open")
+    public ResponseEntity<Void> openChatRoom(
+            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @PathVariable(name = "chatRoomId") Long chatRoomId
+    ) {
+        openChatRoomUseCase.execute(new ChatRoomId(chatRoomId));
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
     @PatchMapping("/{chatRoomId}/close")
