@@ -2,10 +2,8 @@ package com.teka.adapter.chatroom.out.persistence;
 
 import com.teka.adapter.admin.out.persistence.AdminJpaEntity;
 import com.teka.adapter.admin.out.persistence.AdminRepository;
-import com.teka.application.chatroom.port.out.CloseChatRoomPort;
-import com.teka.application.chatroom.port.out.FindChatRoomPort;
-import com.teka.application.chatroom.port.out.OpenChatRoomPort;
-import com.teka.application.chatroom.port.out.SaveChatRoomPort;
+import com.teka.application.chatroom.port.out.*;
+import com.teka.domain.admin.AdminId;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.chatroom.ChatRoomId;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +16,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
-public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoomPort, CloseChatRoomPort, OpenChatRoomPort {
+public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoomPort, CloseChatRoomPort, OpenChatRoomPort, DeleteChatRoomPort, CheckAdminPort {
 
     private final ChatRoomRepository chatRoomRepository;
     private final AdminRepository adminRepository;
@@ -43,6 +41,11 @@ public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoo
                 .map(ChatRoomJpaEntity::toDomain);
     }
 
+    @Override
+    public void deleteById(ChatRoomId chatRoomId) {
+        chatRoomRepository.deleteById(chatRoomId.value());
+    }
+
     @Transactional
     @Override
     public void close(ChatRoomId chatRoomId) {
@@ -56,5 +59,11 @@ public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoo
     public void open(ChatRoomId chatRoomId) {
         ChatRoomJpaEntity chatRoom = chatRoomRepository.findById(chatRoomId.value()).get();
         chatRoom.open();
+    }
+
+    @Override
+    public boolean checkChatRoomByAdminId(ChatRoomId chatRoomId, AdminId adminId) {
+//        AdminJpaEntity admin = adminRepository.findById(adminId.value()).get();
+        return chatRoomRepository.existsByIdAndAdminId(chatRoomId.value(), adminId.value());
     }
 }

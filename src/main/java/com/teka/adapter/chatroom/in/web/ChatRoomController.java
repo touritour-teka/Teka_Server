@@ -31,6 +31,7 @@ public class ChatRoomController {
     private final QueryAllChatRoomUseCase queryAllChatRoomUseCase;
     private final QueryChatRoomUseCase queryChatRoomUseCase;
     private final CloseChatRoomUseCase closeChatRoomUseCase;
+    private final DeleteChatRoomUseCase deleteChatRoomUseCase;
     private final RegisterUserUseCase registerUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final ChangeUserTypeUseCase changeUserTypeUseCase;
@@ -88,6 +89,17 @@ public class ChatRoomController {
             @PathVariable(name = "chatRoomId") Long chatRoomId
     ) {
         closeChatRoomUseCase.execute(new ChatRoomId(chatRoomId));
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @DeleteMapping("/{chatRoomId}")
+    public ResponseEntity<Void> delete(
+            @AuthenticationPrincipal AdminId adminId,
+            @PathVariable Long chatRoomId
+    ) {
+        deleteChatRoomUseCase.execute(new ChatRoomId(chatRoomId), adminId);
         return ResponseEntity
                 .noContent()
                 .build();
