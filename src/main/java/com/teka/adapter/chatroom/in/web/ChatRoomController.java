@@ -50,10 +50,10 @@ public class ChatRoomController {
 
     @GetMapping
     public ResponseEntity<CommonResponse<List<ChatRoomSimpleResponse>>> queryAll(
-            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @AuthenticationPrincipal AdminId adminId,
             @RequestParam(name = "status") List<ChatRoomStatus> statusList
     ) {
-        List<ChatRoomSimpleResponse> response = queryAllChatRoomUseCase.execute(statusList).stream()
+        List<ChatRoomSimpleResponse> response = queryAllChatRoomUseCase.execute(statusList, adminId).stream()
                 .map(ChatRoomSimpleResponse::from)
                 .toList();
         return ResponseEntity
@@ -63,10 +63,10 @@ public class ChatRoomController {
 
     @GetMapping("/{chatRoomId}")
     public ResponseEntity<CommonResponse<ChatRoomResponse>> queryById(
-            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @AuthenticationPrincipal AdminId adminId,
             @PathVariable(name = "chatRoomId") Long chatRoomId
     ) {
-        ChatRoomResponse response = ChatRoomResponse.from(queryChatRoomUseCase.execute(new ChatRoomId(chatRoomId)));
+        ChatRoomResponse response = ChatRoomResponse.from(queryChatRoomUseCase.execute(new ChatRoomId(chatRoomId), adminId));
         return ResponseEntity
                 .ok()
                 .body(CommonResponse.ok(response));
@@ -74,10 +74,10 @@ public class ChatRoomController {
 
     @PatchMapping("/{chatRoomId}/open")
     public ResponseEntity<Void> openChatRoom(
-            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @AuthenticationPrincipal AdminId adminId,
             @PathVariable(name = "chatRoomId") Long chatRoomId
     ) {
-        openChatRoomUseCase.execute(new ChatRoomId(chatRoomId));
+        openChatRoomUseCase.execute(new ChatRoomId(chatRoomId), adminId);
         return ResponseEntity
                 .noContent()
                 .build();
@@ -85,10 +85,10 @@ public class ChatRoomController {
 
     @PatchMapping("/{chatRoomId}/close")
     public ResponseEntity<Void> closeChatRoom(
-            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @AuthenticationPrincipal AdminId adminId,
             @PathVariable(name = "chatRoomId") Long chatRoomId
     ) {
-        closeChatRoomUseCase.execute(new ChatRoomId(chatRoomId));
+        closeChatRoomUseCase.execute(new ChatRoomId(chatRoomId), adminId);
         return ResponseEntity
                 .noContent()
                 .build();
@@ -107,36 +107,38 @@ public class ChatRoomController {
 
     @PostMapping("/{chatRoomId}/users")
     public ResponseEntity<Void> registerUsers(
-            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @AuthenticationPrincipal AdminId adminId,
             @PathVariable(name = "chatRoomId") Long chatRoomId,
             @RequestBody @Valid List<RegisterUserRequest> request
     ) {
         List<RegisterUserCommand> commandList = request.stream()
                 .map(RegisterUserRequest::toCommand)
                 .toList();
-        registerUserUseCase.execute(commandList, new ChatRoomId(chatRoomId));
+        registerUserUseCase.execute(commandList, new ChatRoomId(chatRoomId), adminId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
     }
 
-    @DeleteMapping("/users")
+    @DeleteMapping("/{chatRoomId}/users")
     public ResponseEntity<Void> deleteUser(
-            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @AuthenticationPrincipal AdminId adminId,
+            @PathVariable(name = "chatRoomId") Long chatRoomId,
             @RequestBody List<Long> request
     ) {
-        deleteUserUseCase.execute(request.stream().map(UserId::new).toList());
+        deleteUserUseCase.execute(request.stream().map(UserId::new).toList(), new ChatRoomId(chatRoomId), adminId);
         return ResponseEntity
                 .noContent()
                 .build();
     }
 
-    @PatchMapping("/users")
+    @PatchMapping("/{chatRoomId}/users")
     public ResponseEntity<Void> changeUserType(
-            @AuthenticationPrincipal AdminId ignoredAdminId,
+            @AuthenticationPrincipal AdminId adminId,
+            @PathVariable(name = "chatRoomId") Long chatRoomId,
             @RequestBody @Valid List<ChangeUserTypeRequest> request
     ) {
-        changeUserTypeUseCase.execute(request.stream().map(ChangeUserTypeRequest::toCommand).toList());
+        changeUserTypeUseCase.execute(request.stream().map(ChangeUserTypeRequest::toCommand).toList(), new ChatRoomId(chatRoomId), adminId);
         return ResponseEntity
                 .noContent()
                 .build();

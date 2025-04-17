@@ -29,8 +29,8 @@ public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoo
     }
 
     @Override
-    public List<ChatRoom> findAll() {
-        return chatRoomRepository.findAll().stream()
+    public List<ChatRoom> findByAdminId(AdminId adminId) {
+        return chatRoomRepository.findByAdminId(adminId.value()).stream()
                 .map(ChatRoomJpaEntity::toDomain)
                 .toList();
     }
