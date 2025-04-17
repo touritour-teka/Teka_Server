@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum UserDomainErrorProperty implements ErrorProperty {
 
-    PHONE_NUMBER_FORMAT_MISS_MATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "전화번호는 11자리여야합니다."),
-    EMAIL_FORMAT_MISS_MATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "이메일 형식이 아닙니다.")
+    PHONE_NUMBER_FORMAT_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "전화번호는 11자리여야합니다."),
+    EMAIL_FORMAT_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "이메일 형식이 아닙니다.")
     ;
 
     private final HttpStatus status;
