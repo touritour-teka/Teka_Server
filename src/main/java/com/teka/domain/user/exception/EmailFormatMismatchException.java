@@ -6,6 +6,6 @@ import com.teka.shared.error.TekaException;
 public class EmailFormatMismatchException extends TekaException {
 
     public EmailFormatMismatchException() {
-        super(UserDomainErrorProperty.EMAIL_FORMAT_MISMATCH_EXCEPTION);
+        super(UserDomainErrorProperty.EMAIL_FORMAT_MISMATCH);
     }
 }
