@@ -63,7 +63,6 @@ public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoo
 
     @Override
     public boolean checkChatRoomByAdminId(ChatRoomId chatRoomId, AdminId adminId) {
-//        AdminJpaEntity admin = adminRepository.findById(adminId.value()).get();
         return chatRoomRepository.existsByIdAndAdminId(chatRoomId.value(), adminId.value());
     }
 }
