@@ -18,6 +18,11 @@ public class QueryAllChatRoomService implements QueryAllChatRoomUseCase {
 
     @Override
     public List<ChatRoomSimpleDto> execute(List<ChatRoomStatus> statusList, AdminId adminId) {
+        if (statusList == null) {
+            return findChatRoomPort.findByAdminId(adminId).stream()
+                    .map(ChatRoomSimpleDto::from)
+                    .toList();
+        }
         return findChatRoomPort.findByAdminId(adminId).stream()
                 .filter(chatRoom -> statusList.contains(chatRoom.getStatus()))
                 .map(ChatRoomSimpleDto::from)

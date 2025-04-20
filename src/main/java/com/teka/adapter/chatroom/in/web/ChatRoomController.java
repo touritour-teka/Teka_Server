@@ -51,7 +51,7 @@ public class ChatRoomController {
     @GetMapping
     public ResponseEntity<CommonResponse<List<ChatRoomSimpleResponse>>> queryAll(
             @AuthenticationPrincipal AdminId adminId,
-            @RequestParam(name = "status") List<ChatRoomStatus> statusList
+            @RequestParam(name = "status", required = false) List<ChatRoomStatus> statusList
     ) {
         List<ChatRoomSimpleResponse> response = queryAllChatRoomUseCase.execute(statusList, adminId).stream()
                 .map(ChatRoomSimpleResponse::from)
