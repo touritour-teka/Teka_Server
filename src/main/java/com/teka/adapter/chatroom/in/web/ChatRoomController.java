@@ -2,6 +2,7 @@ package com.teka.adapter.chatroom.in.web;
 
 import com.teka.adapter.chatroom.in.web.dto.request.ChangeUserTypeRequest;
 import com.teka.adapter.chatroom.in.web.dto.request.CreateChatRoomRequest;
+import com.teka.adapter.chatroom.in.web.dto.request.DeleteUserRequest;
 import com.teka.adapter.chatroom.in.web.dto.request.RegisterUserRequest;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomResponse;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomSimpleResponse;
@@ -124,9 +125,9 @@ public class ChatRoomController {
     public ResponseEntity<Void> deleteUser(
             @AuthenticationPrincipal AdminId adminId,
             @PathVariable(name = "chatRoomId") Long chatRoomId,
-            @RequestBody List<Long> request
+            @RequestBody List<DeleteUserRequest> request
     ) {
-        deleteUserUseCase.execute(request.stream().map(UserId::new).toList(), new ChatRoomId(chatRoomId), adminId);
+        deleteUserUseCase.execute(request.stream().map(DeleteUserRequest::toCommand).toList(), new ChatRoomId(chatRoomId), adminId);
         return ResponseEntity
                 .noContent()
                 .build();
