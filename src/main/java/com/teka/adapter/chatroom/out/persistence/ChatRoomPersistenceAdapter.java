@@ -57,7 +57,8 @@ public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoo
     @Transactional
     @Override
     public void open(ChatRoomId chatRoomId) {
-        ChatRoomJpaEntity chatRoom = chatRoomRepository.findById(chatRoomId.value()).get();
+        ChatRoomJpaEntity chatRoom = chatRoomRepository.findById(chatRoomId.value())
+                        .orElseThrow(EntityNotFoundException::new);
         chatRoom.open();
     }
 }
