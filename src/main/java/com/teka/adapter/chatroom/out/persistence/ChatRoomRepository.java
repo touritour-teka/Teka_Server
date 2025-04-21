@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoomJpaEntity, Long> {
     List<ChatRoomJpaEntity> findByAdminId(Long adminId);
-    boolean existsByIdAndAdminId(Long id, Long adminId);
 }

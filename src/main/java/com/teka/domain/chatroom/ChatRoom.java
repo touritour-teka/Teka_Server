@@ -1,6 +1,8 @@
 package com.teka.domain.chatroom;
 
 import com.teka.domain.admin.AdminId;
+import com.teka.domain.chatroom.exception.ChatRoomAdminMismatchException;
+import com.teka.domain.chatroom.exception.OverOperatingPeriodException;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
 import com.teka.domain.user.User;
 import lombok.Builder;
@@ -30,6 +32,18 @@ public class ChatRoom {
     private ChatRoomStatus status;
 
     private List<User> userList;
+
+    public void isAdmin(AdminId adminId) {
+        if (!this.adminId.equals(adminId)) {
+            throw new ChatRoomAdminMismatchException();
+        }
+    }
+
+    public void validateOperatingPeriod(LocalDate now) {
+        if (now.isAfter(endDate)) {
+            throw new OverOperatingPeriodException();
+        }
+    }
 
     @Builder(builderClassName = "ChatRoomBasicBuilder", builderMethodName = "basicBuilder")
     public ChatRoom(ChatRoomId id, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId) {

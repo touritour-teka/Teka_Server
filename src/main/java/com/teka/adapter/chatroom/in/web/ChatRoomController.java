@@ -11,7 +11,6 @@ import com.teka.application.chatroom.port.in.command.RegisterUserCommand;
 import com.teka.domain.admin.AdminId;
 import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
-import com.teka.domain.user.UserId;
 import com.teka.shared.response.CommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

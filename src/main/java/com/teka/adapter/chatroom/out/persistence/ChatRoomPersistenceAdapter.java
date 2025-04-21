@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
-public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoomPort, CloseChatRoomPort, OpenChatRoomPort, DeleteChatRoomPort, CheckAdminPort {
+public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoomPort, CloseChatRoomPort, OpenChatRoomPort, DeleteChatRoomPort {
 
     private final ChatRoomRepository chatRoomRepository;
     private final AdminRepository adminRepository;
@@ -59,10 +59,5 @@ public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoo
     public void open(ChatRoomId chatRoomId) {
         ChatRoomJpaEntity chatRoom = chatRoomRepository.findById(chatRoomId.value()).get();
         chatRoom.open();
-    }
-
-    @Override
-    public boolean checkChatRoomByAdminId(ChatRoomId chatRoomId, AdminId adminId) {
-        return chatRoomRepository.existsByIdAndAdminId(chatRoomId.value(), adminId.value());
     }
 }
