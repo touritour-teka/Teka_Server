@@ -1,4 +1,4 @@
-package com.teka.application.auth.port.service;
+package com.teka.application.auth.service;
 
 import com.teka.application.admin.exception.AdminNotFoundException;
 import com.teka.application.admin.port.out.FindAdminPort;
@@ -26,7 +26,6 @@ public class LoginAdminService implements LogInAdminUseCase {
         try {
             admin = findAdminPort.findByUsername(command.username())
                     .orElseThrow(AdminNotFoundException::new);
-            System.out.println(admin.getPassword());
             validatePassword(command.password(), admin.getPassword());
         } catch (AdminNotFoundException | PasswordMismatchException e) {
             throw new WrongLoginException();

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class AdminJpaEntity {
 
     @Column(name = "admin_id")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 

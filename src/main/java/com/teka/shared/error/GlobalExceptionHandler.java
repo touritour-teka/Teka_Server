@@ -10,6 +10,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,8 +62,30 @@ public class GlobalExceptionHandler {
         logHandledException(e);
 
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(GlobalErrorProperty.BAD_REQUEST.getStatus())
                 .body(CommonResponse.error(GlobalErrorProperty.BAD_REQUEST, e.getMessage()));
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<CommonResponse<Map<String, String>>> handleHandlerMethodValidationException(HandlerMethodValidationException e) {
+        Map<String, String> errorMap = new HashMap<>();
+        e.getParameterValidationResults().forEach(result ->
+                errorMap.put(result.getMethodParameter().getParameterName(), "필수값입니다."));
+
+        logHandledException(e);
+
+        return ResponseEntity
+                .status(GlobalErrorProperty.BAD_REQUEST.getStatus())
+                .body(CommonResponse.error(GlobalErrorProperty.BAD_REQUEST, errorMap));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<CommonResponse<String>> handleNoResourceFoundException(NoResourceFoundException e) {
+        logHandledException(e);
+
+        return ResponseEntity
+                .status(GlobalErrorProperty.NOT_FOUND.getStatus())
+                .body(CommonResponse.error(GlobalErrorProperty.NOT_FOUND, e.getMessage()));
     }
 
     @ExceptionHandler(TekaException.class)

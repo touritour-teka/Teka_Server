@@ -1,4 +1,4 @@
-package com.teka.application.auth.port.service;
+package com.teka.application.auth.service;
 
 import com.teka.application.auth.exception.ExpiredTokenException;
 import com.teka.application.auth.exception.InvalidTokenException;
