@@ -1,9 +1,6 @@
 package com.teka.adapter.chatroom.in.web;
 
-import com.teka.adapter.chatroom.in.web.dto.request.ChangeUserTypeRequest;
-import com.teka.adapter.chatroom.in.web.dto.request.CreateChatRoomRequest;
-import com.teka.adapter.chatroom.in.web.dto.request.DeleteUserRequest;
-import com.teka.adapter.chatroom.in.web.dto.request.RegisterUserRequest;
+import com.teka.adapter.chatroom.in.web.dto.request.*;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomResponse;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomSimpleResponse;
 import com.teka.application.chatroom.port.in.*;
@@ -36,6 +33,7 @@ public class ChatRoomController {
     private final DeleteUserUseCase deleteUserUseCase;
     private final ChangeUserTypeUseCase changeUserTypeUseCase;
     private final OpenChatRoomUseCase openChatRoomUseCase;
+    private final SendMailUseCase sendMailUseCase;
 
     @PostMapping
     public ResponseEntity<Long> create(
@@ -139,6 +137,19 @@ public class ChatRoomController {
             @RequestBody @Valid List<ChangeUserTypeRequest> request
     ) {
         changeUserTypeUseCase.execute(request.stream().map(ChangeUserTypeRequest::toCommand).toList(), new ChatRoomId(chatRoomId), adminId);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @PostMapping("/{chatRoomId}/mails")
+    public ResponseEntity<Void> sendMail(
+            @AuthenticationPrincipal AdminId adminId,
+            @PathVariable(name = "chatRoomId") Long chatRoomId,
+            @RequestBody @Valid List<SendMailRequest> request
+    ) {
+        sendMailUseCase.send(request.stream().map(SendMailRequest::toCommand).toList(), new ChatRoomId(chatRoomId), adminId);
+
         return ResponseEntity
                 .noContent()
                 .build();

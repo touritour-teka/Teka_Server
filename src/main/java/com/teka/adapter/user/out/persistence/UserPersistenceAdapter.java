@@ -11,9 +11,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumberPort, CheckUserEmailPort, DeleteUserPort, ChangeUserPort {
+public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumberPort, CheckUserEmailPort, DeleteUserPort, ChangeUserPort, FindUserPort {
 
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -50,5 +52,11 @@ public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumbe
                 .orElseThrow(EntityNotFoundException::new);
         user.changeType(type);
         userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findById(UserId userId) {
+        return userRepository.findById(userId.value())
+                .map(UserJpaEntity::toDomain);
     }
 }
