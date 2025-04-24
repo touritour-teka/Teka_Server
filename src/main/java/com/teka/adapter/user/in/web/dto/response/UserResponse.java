@@ -1,6 +1,6 @@
 package com.teka.adapter.user.in.web.dto.response;
 
-import com.teka.application.user.port.in.dto.UserDto;
+import com.teka.application.user.port.dto.UserDto;
 import com.teka.domain.user.type.Language;
 import com.teka.domain.user.type.UserType;
 

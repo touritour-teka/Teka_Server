@@ -4,6 +4,7 @@ import com.teka.adapter.chatroom.out.persistence.ChatRoomJpaEntity;
 import com.teka.adapter.chatroom.out.persistence.ChatRoomRepository;
 import com.teka.application.user.port.out.*;
 import com.teka.domain.chatroom.ChatRoomId;
+import com.teka.domain.user.PhoneNumber;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
 import com.teka.domain.user.type.UserType;
@@ -11,9 +12,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumberPort, CheckUserEmailPort, DeleteUserPort, ChangeUserPort {
+public class UserPersistenceAdapter implements SaveUserPort, CheckUserPort, DeleteUserPort, ChangeUserPort, FindUserPort {
 
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -26,10 +29,15 @@ public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumbe
     }
 
     @Override
-    public boolean existsByPhoneNumber(String phoneNumber, ChatRoomId chatRoomId) {
-        ChatRoomJpaEntity chatRoom = chatRoomRepository.findById(chatRoomId.value())
-                .orElseThrow(EntityNotFoundException::new);
-        return userRepository.existsByChatRoomAndPhoneNumber(chatRoom, phoneNumber);
+    public Optional<User> findById(UserId id) {
+        return userRepository.findById(id.value())
+                .map(UserJpaEntity::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByPhoneNumber(PhoneNumber phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber.value())
+                .map(UserJpaEntity::toDomain);
     }
 
     @Override
@@ -40,8 +48,10 @@ public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumbe
     }
 
     @Override
-    public void deleteByUserId(UserId userId) {
-        userRepository.deleteById(userId.value());
+    public boolean existsByPhoneNumber(PhoneNumber phoneNumber, ChatRoomId chatRoomId) {
+        ChatRoomJpaEntity chatRoom = chatRoomRepository.findById(chatRoomId.value())
+                .orElseThrow(EntityNotFoundException::new);
+        return userRepository.existsByChatRoomAndPhoneNumber(chatRoom, phoneNumber.value());
     }
 
     @Override
@@ -50,5 +60,10 @@ public class UserPersistenceAdapter implements SaveUserPort, CheckUserPhoneNumbe
                 .orElseThrow(EntityNotFoundException::new);
         user.changeType(type);
         userRepository.save(user);
+    }
+
+    @Override
+    public void deleteByUserId(UserId userId) {
+        userRepository.deleteById(userId.value());
     }
 }
