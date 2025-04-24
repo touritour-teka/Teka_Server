@@ -9,6 +9,7 @@ import com.teka.application.auth.port.out.SaveTokenPort;
 import com.teka.application.auth.port.out.TokenProvider;
 import com.teka.domain.auth.Token;
 import com.teka.domain.auth.type.TokenType;
+import com.teka.domain.auth.type.Authority;
 import com.teka.shared.config.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -31,32 +32,38 @@ public class JwtTokenProvider implements TokenProvider {
     private final SaveTokenPort saveTokenPort;
 
     @Override
-    public String generateAccessToken(String uuid) {
-        return generateToken(uuid, TokenType.ACCESS_TOKEN, jwtProperties.getAccessExpirationTime());
+    public String generateAccessToken(String uuid, Authority authority) {
+        return generateToken(uuid, authority, TokenType.ACCESS_TOKEN, jwtProperties.getAccessExpirationTime());
     }
 
     @Override
-    public String generateRefreshToken(String uuid) {
-        String token = generateToken(uuid, TokenType.REFRESH_TOKEN, jwtProperties.getRefreshExpirationTime());
-        saveTokenPort.save(new Token(uuid, token));
+    public String generateRefreshToken(String uuid, Authority authority) {
+        String token = generateToken(uuid, authority, TokenType.REFRESH_TOKEN, jwtProperties.getRefreshExpirationTime());
+        saveTokenPort.save(new Token(uuid, authority, token));
         return token;
     }
 
     @Override
-    public String getUuid(String uuid) {
-        return extractAllClaims(uuid).get("uuid", String.class);
+    public String getUuid(String token) {
+        return extractAllClaims(token).get("uuid", String.class);
     }
 
     @Override
-    public String getType(String token) {
-        return extractAllClaims(token).get("type", String.class);
+    public TokenType getType(String token) {
+        return TokenType.valueOf(extractAllClaims(token).get("type", String.class));
     }
 
-    private String generateToken(String uuid, TokenType type, Long time) {
+    @Override
+    public Authority getAuthority(String token) {
+        return Authority.valueOf(extractAllClaims(token).get("authority", String.class));
+    }
+
+    private String generateToken(String uuid, Authority authority, TokenType type, Long time) {
         Date now = new Date();
 
         return Jwts.builder()
                 .claim("uuid", uuid)
+                .claim("authority", authority.name())
                 .claim("type", type.name())
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + time))

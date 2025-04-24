@@ -10,6 +10,7 @@ import com.teka.application.auth.port.in.command.LogInAdminCommand;
 import com.teka.application.auth.port.out.TokenProvider;
 import com.teka.domain.admin.Admin;
 import com.teka.domain.admin.Password;
+import com.teka.domain.auth.type.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,8 @@ public class LoginAdminService implements LogInAdminUseCase {
         }
 
         return TokenDto.builder()
-                .accessToken(tokenProvider.generateAccessToken(admin.getUsername()))
-                .refreshToken(tokenProvider.generateRefreshToken(admin.getUsername()))
+                .accessToken(tokenProvider.generateAccessToken(admin.getUsername(), Authority.ADMIN))
+            .refreshToken(tokenProvider.generateRefreshToken(admin.getUsername(), Authority.ADMIN))
                 .build();
     }
 

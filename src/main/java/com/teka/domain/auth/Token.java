@@ -1,4 +1,10 @@
 package com.teka.domain.auth;
 
-public record Token(String uuid, String token) {
+import com.teka.domain.auth.type.Authority;
+
+public record Token(
+        String uuid,
+        Authority authority,
+        String token
+) {
 }
