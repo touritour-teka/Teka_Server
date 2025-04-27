@@ -34,7 +34,7 @@ public class LoginAdminService implements LogInAdminUseCase {
 
         return TokenDto.builder()
                 .accessToken(tokenProvider.generateAccessToken(admin.getUsername(), Authority.ADMIN))
-            .refreshToken(tokenProvider.generateRefreshToken(admin.getUsername(), Authority.ADMIN))
+                .refreshToken(tokenProvider.generateRefreshToken(admin.getUsername(), Authority.ADMIN))
                 .build();
     }
 

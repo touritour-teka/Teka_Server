@@ -7,10 +7,12 @@ import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.user.PhoneNumber;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
+import com.teka.domain.user.type.Language;
 import com.teka.domain.user.type.UserType;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -35,8 +37,11 @@ public class UserPersistenceAdapter implements SaveUserPort, CheckUserPort, Dele
     }
 
     @Override
-    public Optional<User> findByPhoneNumber(PhoneNumber phoneNumber) {
-        return userRepository.findByPhoneNumber(phoneNumber.value())
+    public Optional<User> findByPhoneNumber(PhoneNumber phoneNumber, ChatRoomId chatRoomId) {
+        ChatRoomJpaEntity chatRoom = chatRoomRepository.findById(chatRoomId.value())
+                .orElseThrow(EntityNotFoundException::new);
+
+        return userRepository.findByPhoneNumberAndChatRoom(phoneNumber.value(), chatRoom)
                 .map(UserJpaEntity::toDomain);
     }
 
@@ -60,6 +65,22 @@ public class UserPersistenceAdapter implements SaveUserPort, CheckUserPort, Dele
                 .orElseThrow(EntityNotFoundException::new);
         user.changeType(type);
         userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public void changeUsername(UserId userId, String username) {
+        UserJpaEntity user = userRepository.findById(userId.value())
+                .orElseThrow(EntityNotFoundException::new);
+        user.setUsername(username);
+    }
+
+    @Transactional
+    @Override
+    public void changeLanguage(UserId userId, Language language) {
+        UserJpaEntity user = userRepository.findById(userId.value())
+                .orElseThrow(EntityNotFoundException::new);
+        user.setLanguage(language);
     }
 
     @Override
