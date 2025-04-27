@@ -42,7 +42,7 @@ public class LogInUserService implements LogInUserUseCase {
 
         return TokenDto.builder()
                 .accessToken(jwtTokenProvider.generateAccessToken(user.getId().value().toString(), Authority.USER))
-                .refreshToken(jwtTokenProvider.generateRefreshToken(user.getId().value().toString(), Authority.ADMIN))
+                .refreshToken(jwtTokenProvider.generateRefreshToken(user.getId().value().toString(), Authority.USER))
                 .build();
     }
 }
