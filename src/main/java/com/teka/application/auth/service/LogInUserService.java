@@ -32,9 +32,8 @@ public class LogInUserService implements LogInUserUseCase {
         UUID uuid = UUID.fromString(chatRoomUuid);
         ChatRoom chatRoom = findChatRoomPort.findByUuid(uuid)
                 .orElseThrow(ChatRoomNotFoundException::new);
-        User user;
 
-        user = findUserPort.findByPhoneNumber(new PhoneNumber(command.phoneNumber()), chatRoom.getId())
+        User user = findUserPort.findByPhoneNumber(new PhoneNumber(command.phoneNumber()), chatRoom.getId())
                 .orElseThrow(UserNotFoundException::new);
 
         changeUserPort.changeUsername(user.getId(), command.name());
