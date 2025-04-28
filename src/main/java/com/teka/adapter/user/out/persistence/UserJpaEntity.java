@@ -6,6 +6,7 @@ import com.teka.domain.user.Email;
 import com.teka.domain.user.PhoneNumber;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
+import com.teka.domain.user.exception.UsernameLengthExceededException;
 import com.teka.domain.user.type.Language;
 import com.teka.domain.user.type.UserType;
 import jakarta.persistence.*;
@@ -84,7 +85,7 @@ public class UserJpaEntity {
 
     public void setUsername(String username) {
         if (username.length() > 30) {
-            throw new IllegalArgumentException("이름은 30글자 이하여야 합니다.");
+            throw new UsernameLengthExceededException();
         }
         this.username = username;
     }
