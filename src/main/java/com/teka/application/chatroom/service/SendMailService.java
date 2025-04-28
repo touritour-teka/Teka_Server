@@ -33,7 +33,7 @@ public class SendMailService implements SendMailUseCase {
         for (SendMailCommand command : commandList) {
             User user = findUserPort.findById(command.userId())
                     .orElseThrow(UserNotFoundException::new);
-            sendMailPort.send(user.getEmail(), "트까 채팅방 초대", "https://localhost:8080/" + chatRoom.getUuid().toString());
+            sendMailPort.send(user.getEmail(), "[트까]채팅방 초대", chatRoom.getName(), "https://localhost:8080/" + chatRoom.getUuid().toString());
         }
     }
 }

@@ -24,13 +24,13 @@ public class MailSenderAdapter implements SendMailPort {
     private String from;
 
     @Override
-    public void send(Email to, String subject, String link) {
+    public void send(Email to, String subject, String chatRoomName, String link) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
             helper.setTo(to.value());
             helper.setSubject(subject);
-            helper.setText(setContext(link), true);
+            helper.setText(setContext(chatRoomName, link), true);
             helper.setFrom(from);
 
             javaMailSender.send(message);
@@ -39,8 +39,9 @@ public class MailSenderAdapter implements SendMailPort {
         }
     }
 
-    private String setContext(String link) {
+    private String setContext(String chatRoomName, String link) {
         Context context = new Context();
+        context.setVariable("chatRoomName", chatRoomName);
         context.setVariable("link", link);
         return templateEngine.process("mail", context);
     }
