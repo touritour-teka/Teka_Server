@@ -1,6 +1,6 @@
-package com.teka.adapter.mail.out;
+package com.teka.adapter.link.out;
 
-import com.teka.application.chatroom.port.out.SendMailPort;
+import com.teka.application.chatroom.port.out.SendMailLinkPort;
 import com.teka.domain.user.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -14,7 +14,7 @@ import org.thymeleaf.context.Context;
 
 @RequiredArgsConstructor
 @Service
-public class MailSenderAdapter implements SendMailPort {
+public class MailLinkSenderAdapter implements SendMailLinkPort {
 
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
