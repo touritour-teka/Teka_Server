@@ -6,13 +6,11 @@ import com.teka.domain.user.Email;
 import com.teka.domain.user.PhoneNumber;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
+import com.teka.domain.user.exception.UsernameLengthExceededException;
 import com.teka.domain.user.type.Language;
 import com.teka.domain.user.type.UserType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +32,7 @@ public class UserJpaEntity {
     @Column(nullable = false, length = 255)
     private String email;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = true, length = 30)
     private Language language;
@@ -82,5 +81,12 @@ public class UserJpaEntity {
                 .type(this.type)
                 .chatRoomId(new ChatRoomId(this.chatRoom.getId()))
                 .build();
+    }
+
+    public void setUsername(String username) {
+        if (username.length() > 30) {
+            throw new UsernameLengthExceededException();
+        }
+        this.username = username;
     }
 }

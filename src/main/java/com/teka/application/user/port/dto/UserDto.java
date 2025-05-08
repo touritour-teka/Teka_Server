@@ -1,4 +1,4 @@
-package com.teka.application.user.port.in.dto;
+package com.teka.application.user.port.dto;
 
 import com.teka.domain.user.Email;
 import com.teka.domain.user.PhoneNumber;

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -38,6 +39,12 @@ public class ChatRoomPersistenceAdapter implements SaveChatRoomPort, FindChatRoo
     @Override
     public Optional<ChatRoom> findById(ChatRoomId chatRoomId) {
         return chatRoomRepository.findById(chatRoomId.value())
+                .map(ChatRoomJpaEntity::toDomain);
+    }
+
+    @Override
+    public Optional<ChatRoom> findByUuid(UUID uuid) {
+        return chatRoomRepository.findByUuid(uuid)
                 .map(ChatRoomJpaEntity::toDomain);
     }
 

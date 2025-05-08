@@ -1,7 +1,10 @@
 package com.teka.shared.auth;
 
+import com.teka.application.auth.port.out.TokenProvider;
 import com.teka.application.auth.service.AuthFacade;
 import com.teka.domain.admin.Admin;
+import com.teka.domain.auth.type.Authority;
+import com.teka.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +20,7 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
 
     private final AuthenticationExtractor authenticationExtractor;
     private final AuthFacade authFacade;
+    private final TokenProvider tokenProvider;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -27,8 +31,15 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String token = authenticationExtractor.extract(webRequest);
-        Admin admin = authFacade.getAdmin(token);
 
-        return admin.getId();
+        if (tokenProvider.getAuthority(token) == Authority.ADMIN) {
+            Admin admin = authFacade.getAdmin(token);
+            return admin.getId();
+        } else if (tokenProvider.getAuthority(token) == Authority.USER) {
+            User user = authFacade.getUser(token);
+            return user.getId();
+        } else {
+            return null;
+        }
     }
 }

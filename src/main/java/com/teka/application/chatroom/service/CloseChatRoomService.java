@@ -6,7 +6,6 @@ import com.teka.application.chatroom.port.out.CloseChatRoomPort;
 import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.domain.admin.AdminId;
 import com.teka.domain.chatroom.ChatRoomId;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

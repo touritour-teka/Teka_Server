@@ -1,6 +1,6 @@
 package com.teka.application.chatroom.port.dto;
 
-import com.teka.application.user.port.in.dto.UserDto;
+import com.teka.application.user.port.dto.UserDto;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
