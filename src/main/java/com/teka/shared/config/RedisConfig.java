@@ -1,6 +1,6 @@
 package com.teka.shared.config;
 
-import com.teka.adapter.chat.out.redis.RedisSubscriber;
+import com.teka.adapter.chat.out.redis.ChatRedisSubscriber;
 import com.teka.shared.constants.WebSocketConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 @Configuration
 public class RedisConfig {
 
-    private final RedisSubscriber redisSubscriber;
+    private final ChatRedisSubscriber redisSubscriber;
 
     @Bean
     public RedisMessageListenerContainer redisContainer(
