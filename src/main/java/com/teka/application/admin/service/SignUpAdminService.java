@@ -22,7 +22,7 @@ public class SignUpAdminService implements SignUpAdminUseCase {
             throw new AdminIdAlreadyExistsException();
         }
 
-        Admin admin = new Admin(null, command.username(), command.password());
+        Admin admin = new Admin(null, command.username(), command.password(), null, null);
         return saveAdminPort.save(admin);
     }
 }

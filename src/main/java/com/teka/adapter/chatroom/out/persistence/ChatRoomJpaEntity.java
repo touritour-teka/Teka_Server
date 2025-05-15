@@ -84,6 +84,8 @@ public class ChatRoomJpaEntity extends BaseTimeEntity {
                 .adminId(admin.toDomain().getId())
                 .status(status)
                 .userList(userList.stream().map(UserJpaEntity::toDomain).toList())
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
                 .build();
     }
 

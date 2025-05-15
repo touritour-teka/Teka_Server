@@ -1,9 +1,9 @@
 package com.teka.application.chatroom.service;
 
-import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.application.chatroom.exception.ChatRoomNotFoundException;
 import com.teka.application.chatroom.port.in.RegisterUserUseCase;
 import com.teka.application.chatroom.port.in.command.RegisterUserCommand;
+import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.application.user.exception.EmailAlreadyExistsException;
 import com.teka.application.user.exception.PhoneNumberAlreadyExistsException;
 import com.teka.application.user.port.out.CheckUserPort;
@@ -45,6 +45,8 @@ public class RegisterUserService implements RegisterUserUseCase {
                     .email(new Email(command.email()))
                     .type(command.type())
                     .chatRoomId(chatRoomId)
+                    .createdAt(null)
+                    .updatedAt(null)
                     .build();
             saveUserPort.save(user);
         }

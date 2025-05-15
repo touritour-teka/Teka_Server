@@ -25,6 +25,8 @@ public class CreateChatRoomService implements CreateChatRoomUseCase {
                 .endDate(command.endDate())
                 .maxParticipants(command.maxParticipants())
                 .adminId(adminId)
+                .createdAt(null)
+                .updatedAt(null)
                 .build();
 
         try {

@@ -81,6 +81,8 @@ public class UserJpaEntity extends BaseTimeEntity {
                 .language(this.language)
                 .type(this.type)
                 .chatRoomId(new ChatRoomId(this.chatRoom.getId()))
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
                 .build();
     }
 

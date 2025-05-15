@@ -32,7 +32,7 @@ public class AdminJpaEntity extends BaseTimeEntity {
     }
 
     public Admin toDomain() {
-        return new Admin(new AdminId(this.id), this.username, new Password(this.password));
+        return new Admin(new AdminId(this.id), this.username, new Password(this.password), getCreatedAt(), getUpdatedAt());
     }
 
     public static AdminJpaEntity from(Admin admin) {
