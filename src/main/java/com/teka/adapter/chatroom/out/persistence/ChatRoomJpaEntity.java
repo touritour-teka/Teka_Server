@@ -5,6 +5,7 @@ import com.teka.adapter.user.out.persistence.UserJpaEntity;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
+import com.teka.shared.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "tbl_chat_room")
-public class ChatRoomJpaEntity {
+public class ChatRoomJpaEntity extends BaseTimeEntity {
 
     @Column(name = "chat_room_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

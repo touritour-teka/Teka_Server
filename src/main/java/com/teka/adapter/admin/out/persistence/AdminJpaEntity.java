@@ -3,6 +3,7 @@ package com.teka.adapter.admin.out.persistence;
 import com.teka.domain.admin.Admin;
 import com.teka.domain.admin.AdminId;
 import com.teka.domain.admin.Password;
+import com.teka.shared.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "tbl_admin")
-public class AdminJpaEntity {
+public class AdminJpaEntity extends BaseTimeEntity {
 
     @Column(name = "admin_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
