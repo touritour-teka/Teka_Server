@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record ChatRequest(
         @NotBlank(message = "필수값입니다.")
-        String content
+        String message
 ) {
     public ChatCommand toCommand() {
-        return new ChatCommand(content);
+        return new ChatCommand(message);
     }
 }
