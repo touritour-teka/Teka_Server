@@ -5,6 +5,7 @@ import com.teka.application.chat.port.dto.ChatDto;
 import com.teka.application.chat.port.in.ChatMessageUseCase;
 import com.teka.application.chat.port.in.command.ChatCommand;
 import com.teka.application.chat.port.out.SaveChatPort;
+import com.teka.application.chatroom.exception.ChatRoomNotFoundException;
 import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.application.user.exception.UserNotFoundException;
 import com.teka.application.user.port.out.FindUserPort;
@@ -32,9 +33,9 @@ public class ChatMessageService implements ChatMessageUseCase {
         User user = findUserPort.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         ChatRoom chatRoom = findChatRoomPort.findByUuid(UUID.fromString(chatRoomUuid))
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(ChatRoomNotFoundException::new);
 
-        saveChatPort.save(
+        Chat chat = saveChatPort.save(
                 Chat.builder()
                         .id(null)
                         .user(user)
@@ -46,7 +47,14 @@ public class ChatMessageService implements ChatMessageUseCase {
         );
 
         redisPublisher.publish(WebSocketConstant.SUBSCRIBE_ENDPOINT + chatRoomUuid,
-                new ChatDto(chatRoomUuid, user.getUsername(), command.message())
+                new ChatDto(
+                        chat.getId().value(),
+                        chat.getChatRoom().getUuid().toString(),
+                        chat.getUser().getUsername(),
+                        chat.getMessage(),
+                        chat.getCreatedAt(),
+                        chat.getUpdatedAt()
+                )
         );
     }
 }

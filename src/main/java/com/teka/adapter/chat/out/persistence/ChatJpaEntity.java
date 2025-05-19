@@ -39,10 +39,13 @@ public class ChatJpaEntity extends BaseTimeEntity {
     }
 
     public Chat toDomain() {
-        return Chat.builder()
-                .id(new ChatId(id))
-                .user(user.toDomain())
-                .chatRoom(chatRoom.toDomain())
-                .build();
+        return new Chat(
+                new ChatId(id),
+                user.toDomain(),
+                chatRoom.toDomain(),
+                message,
+                getCreatedAt(),
+                getUpdatedAt()
+        );
     }
 }
