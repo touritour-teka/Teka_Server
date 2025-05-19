@@ -12,7 +12,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tbl_chat")
+@Table(name = "tbl_chat", indexes = {
+        @Index(name = "idx_chat_room_created_id", columnList = "chat_room_id, created_at, chat_id")
+})
+
 @Entity
 public class ChatJpaEntity extends BaseTimeEntity {
 
