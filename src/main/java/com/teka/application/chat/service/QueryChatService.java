@@ -1,5 +1,6 @@
 package com.teka.application.chat.service;
 
+import com.teka.application.chat.exception.UserNotInChatRoomException;
 import com.teka.application.chat.port.dto.ChatDto;
 import com.teka.application.chat.port.in.QueryChatUseCase;
 import com.teka.application.chat.port.out.FindChatPort;
@@ -31,9 +32,17 @@ public class QueryChatService implements QueryChatUseCase {
         ChatRoom chatRoom = findChatRoomPort.findByUuid(UUID.fromString(chatRoomUuid))
                 .orElseThrow(ChatRoomNotFoundException::new);
 
+        validateUser(user, chatRoom);
+
         return findChatPort.findChats(chatRoom, cursor, size)
                 .stream()
                 .map(ChatDto::from)
                 .toList();
+    }
+
+    private void validateUser(User user, ChatRoom chatRoom) {
+        if (!user.getChatRoomId().equals(chatRoom.getId())) {
+            throw new UserNotInChatRoomException();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.teka.application.chat.service;
 
 import com.teka.adapter.chat.out.redis.ChatRedisPublisher;
+import com.teka.application.chat.exception.UserNotInChatRoomException;
 import com.teka.application.chat.port.dto.ChatDto;
 import com.teka.application.chat.port.in.ChatMessageUseCase;
 import com.teka.application.chat.port.in.command.ChatCommand;
@@ -35,6 +36,8 @@ public class ChatMessageService implements ChatMessageUseCase {
         ChatRoom chatRoom = findChatRoomPort.findByUuid(UUID.fromString(chatRoomUuid))
                 .orElseThrow(ChatRoomNotFoundException::new);
 
+        validateUser(user, chatRoom);
+
         Chat chat = saveChatPort.save(
                 Chat.builder()
                         .id(null)
@@ -56,5 +59,11 @@ public class ChatMessageService implements ChatMessageUseCase {
                         chat.getUpdatedAt()
                 )
         );
+    }
+
+    private void validateUser(User user, ChatRoom chatRoom) {
+        if (!user.getChatRoomId().equals(chatRoom.getId())) {
+            throw new UserNotInChatRoomException();
+        }
     }
 }
