@@ -1,6 +1,7 @@
 package com.teka.application.chat.port.dto;
 
 import com.teka.domain.chat.Chat;
+import com.teka.domain.user.type.Language;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +10,7 @@ public record ChatDto(
         String chatRoomUuid,
         String sender,
         String message,
+        Language detectedLanguage,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -18,6 +20,7 @@ public record ChatDto(
                 chat.getChatRoom().getUuid().toString(),
                 chat.getUser().getUsername(),
                 chat.getMessage(),
+                chat.getDetectedLanguage(),
                 chat.getCreatedAt(),
                 chat.getUpdatedAt()
         );

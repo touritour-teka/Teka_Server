@@ -4,6 +4,7 @@ import com.teka.adapter.chatroom.out.persistence.ChatRoomJpaEntity;
 import com.teka.adapter.user.out.persistence.UserJpaEntity;
 import com.teka.domain.chat.Chat;
 import com.teka.domain.chat.ChatId;
+import com.teka.domain.user.type.Language;
 import com.teka.shared.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,7 +16,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "tbl_chat", indexes = {
         @Index(name = "idx_chat_room_created_id", columnList = "chat_room_id, created_at, chat_id")
 })
-
 @Entity
 public class ChatJpaEntity extends BaseTimeEntity {
 
@@ -35,10 +35,15 @@ public class ChatJpaEntity extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
-    public ChatJpaEntity(UserJpaEntity user, ChatRoomJpaEntity chatRoom, String message) {
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private Language detectedLanguage;
+
+    public ChatJpaEntity(UserJpaEntity user, ChatRoomJpaEntity chatRoom, String message, Language detectedLanguage) {
         this.user = user;
         this.chatRoom = chatRoom;
         this.message = message;
+        this.detectedLanguage = detectedLanguage;
     }
 
     public Chat toDomain() {
@@ -47,6 +52,7 @@ public class ChatJpaEntity extends BaseTimeEntity {
                 user.toDomain(),
                 chatRoom.toDomain(),
                 message,
+                detectedLanguage,
                 getCreatedAt(),
                 getUpdatedAt()
         );
