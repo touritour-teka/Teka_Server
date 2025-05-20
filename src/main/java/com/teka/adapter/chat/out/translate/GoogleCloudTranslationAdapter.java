@@ -51,7 +51,7 @@ public class GoogleCloudTranslationAdapter {
         return Language.fromCode(response.getLanguages(0).getLanguageCode());
     }
 
-    public Translation translateText(String targetLanguageCode, String text) {
+    public String translateText(String targetLanguageCode, String text) {
         TranslateTextRequest request = TranslateTextRequest.newBuilder()
                 .setParent(parent)
                 .setMimeType("text/plain")
@@ -61,10 +61,10 @@ public class GoogleCloudTranslationAdapter {
 
         TranslateTextResponse response = client.translateText(request);
 
-        return response.getTranslations(0);
+        return response.getTranslations(0).getTranslatedText();
     }
 
-    public List<Translation> translateAllTexts(String targetLanguageCode, List<String> texts) {
+    public List<String> translateAllTexts(String targetLanguageCode, List<String> texts) {
         TranslateTextRequest request = TranslateTextRequest.newBuilder()
                 .setParent(parent)
                 .setMimeType("text/plain")
@@ -74,6 +74,8 @@ public class GoogleCloudTranslationAdapter {
 
         TranslateTextResponse response = client.translateText(request);
 
-        return response.getTranslationsList();
+        return response.getTranslationsList().stream()
+                .map(Translation::getTranslatedText)
+                .toList();
     }
 }
