@@ -1,6 +1,7 @@
 package com.teka.application.chat.service;
 
 import com.teka.adapter.chat.out.redis.ChatRedisPublisher;
+import com.teka.adapter.chat.out.translate.GoogleCloudTranslationAdapter;
 import com.teka.application.chat.exception.UserNotInChatRoomException;
 import com.teka.application.chat.port.dto.ChatDto;
 import com.teka.application.chat.port.in.ChatMessageUseCase;
@@ -14,6 +15,7 @@ import com.teka.domain.chat.Chat;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
+import com.teka.domain.user.type.Language;
 import com.teka.shared.constants.WebSocketConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class ChatMessageService implements ChatMessageUseCase {
     private final FindUserPort findUserPort;
     private final SaveChatPort saveChatPort;
     private final FindChatRoomPort findChatRoomPort;
+    private final GoogleCloudTranslationAdapter googleCloudTranslationAdapter;
 
     @Override
     public void execute(UserId userId, String chatRoomUuid, ChatCommand command) {
@@ -38,15 +41,17 @@ public class ChatMessageService implements ChatMessageUseCase {
 
         validateUser(user, chatRoom);
 
+        Language language = googleCloudTranslationAdapter.detectLanguage(command.message());
         Chat chat = saveChatPort.save(
-                Chat.builder()
-                        .id(null)
-                        .user(user)
-                        .chatRoom(chatRoom)
-                        .message(command.message())
-                        .createdAt(null)
-                        .updatedAt(null)
-                        .build()
+                new Chat(
+                        null,
+                        user,
+                        chatRoom,
+                        command.message(),
+                        language,
+                        null,
+                        null
+                )
         );
 
         redisPublisher.publish(WebSocketConstant.SUBSCRIBE_ENDPOINT + chatRoomUuid,
@@ -55,6 +60,7 @@ public class ChatMessageService implements ChatMessageUseCase {
                         chat.getChatRoom().getUuid().toString(),
                         chat.getUser().getUsername(),
                         chat.getMessage(),
+                        chat.getDetectedLanguage(),
                         chat.getCreatedAt(),
                         chat.getUpdatedAt()
                 )
