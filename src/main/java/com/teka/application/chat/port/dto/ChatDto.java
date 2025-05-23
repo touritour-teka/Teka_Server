@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public record ChatDto(
         Long id,
         String chatRoomUuid,
-        String sender,
+        SenderDto sender,
         String message,
         Language detectedLanguage,
         LocalDateTime createdAt,
@@ -18,7 +18,7 @@ public record ChatDto(
         return new ChatDto(
                 chat.getId().value(),
                 chat.getChatRoom().getUuid().toString(),
-                chat.getUser().getUsername(),
+                new SenderDto(chat.getUser().getId(), chat.getUser().getUsername()),
                 chat.getMessage(),
                 chat.getDetectedLanguage(),
                 chat.getCreatedAt(),
