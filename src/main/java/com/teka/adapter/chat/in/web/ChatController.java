@@ -71,7 +71,7 @@ public class ChatController {
     ) {
         List<ChatResponse> responseList = queryChatUseCase.execute(userId, chatRoomUuid, cursor, size)
                 .stream()
-                .map(dto -> ChatResponse.from(dto, null))
+                .map(ChatResponse::from)
                 .toList();
 
         return ResponseEntity

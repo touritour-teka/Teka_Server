@@ -8,18 +8,33 @@ import java.time.LocalDateTime;
 public record ChatResponse(
         Long id,
         SenderResponse sender,
-        String message,
         Language detectedLanguage,
+        String message,
+        Language targetLanguage,
         String translatedMessage,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    public static ChatResponse from(ChatDto dto, String translatedMessage) {
+    public static ChatResponse from(ChatDto dto) {
         return new ChatResponse(
                 dto.id(),
                 SenderResponse.from(dto.sender()),
-                dto.message(),
                 dto.detectedLanguage(),
+                dto.message(),
+                dto.targetLanguage(),
+                dto.translatedMessage(),
+                dto.createdAt(),
+                dto.updatedAt()
+        );
+    }
+
+    public static ChatResponse from(ChatDto dto, Language targetLanguage, String translatedMessage) {
+        return new ChatResponse(
+                dto.id(),
+                SenderResponse.from(dto.sender()),
+                dto.detectedLanguage(),
+                dto.message(),
+                targetLanguage,
                 translatedMessage,
                 dto.createdAt(),
                 dto.updatedAt()
