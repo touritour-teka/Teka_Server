@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,21 +41,15 @@ public class ChatRedisSubscriber implements MessageListener {
             ChatRoom chatRoom = findChatRoomPort.findByUuid(UUID.fromString(dto.chatRoomUuid()))
                     .orElseThrow(ChatRoomNotFoundException::new);
             List<User> userList = chatRoom.getUserList();
-            Map<Language, List<User>> userByLanguage = userList.stream()
-                    .collect(Collectors.groupingBy(User::getLanguage));
-
-            for (Map.Entry<Language, List<User>> entry : userByLanguage.entrySet()) {
-                Language language = entry.getKey();
-                List<User> users = entry.getValue();
-                String translatedMessage = googleCloudTranslationAdapter.translateText(language.getCode(), dto.message());
-
-                for (User user : users) {
-                    messagingTemplate.convertAndSendToUser(
-                            user.getId().value().toString(),
-                            WebSocketConstant.SUBSCRIBE_ENDPOINT + dto.chatRoomUuid(),
-                            ChatResponse.from(dto, language != dto.detectedLanguage() ? translatedMessage : null)
-                    );
-                }
+            Set<Language> languageSet = userList.stream()
+                    .map(User::getLanguage)
+                    .collect(Collectors.toSet());
+            for (Language language : languageSet) {
+                String translatedText = googleCloudTranslationAdapter.translateText(language.getCode(), dto.message());
+                messagingTemplate.convertAndSend(
+                        WebSocketConstant.SUBSCRIBE_ENDPOINT + dto.chatRoomUuid() + "/" + language,
+                        ChatResponse.from(dto, translatedText)
+                );
             }
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

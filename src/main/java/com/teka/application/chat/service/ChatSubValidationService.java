@@ -1,5 +1,6 @@
 package com.teka.application.chat.service;
 
+import com.teka.application.chat.port.in.ChatSubValidationUseCase;
 import com.teka.application.chatroom.exception.ChatRoomNotFoundException;
 import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.application.user.exception.UserNotFoundException;
@@ -16,11 +17,12 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class ChatSubValidationService {
+public class ChatSubValidationService implements ChatSubValidationUseCase {
 
     private final FindUserPort findUserPort;
     private final FindChatRoomPort findChatRoomPort;
 
+    @Override
     @Transactional(readOnly = true)
     public void execute(UserId userId, String chatRoomUuid) {
         User user = findUserPort.findById(userId)
