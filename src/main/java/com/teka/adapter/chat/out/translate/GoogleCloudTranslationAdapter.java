@@ -64,12 +64,16 @@ public class GoogleCloudTranslationAdapter {
         return response.getTranslations(0).getTranslatedText();
     }
 
-    public List<String> translateAllTexts(String targetLanguageCode, List<String> texts) {
+    public List<String> translateAllTexts(String targetLanguageCode, List<String> textList) {
+        if (textList == null || textList.isEmpty()) {
+            return List.of();
+        }
+
         TranslateTextRequest request = TranslateTextRequest.newBuilder()
                 .setParent(parent)
                 .setMimeType("text/plain")
                 .setTargetLanguageCode(targetLanguageCode)
-                .addAllContents(texts)
+                .addAllContents(textList)
                 .build();
 
         TranslateTextResponse response = client.translateText(request);
