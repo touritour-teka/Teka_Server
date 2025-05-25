@@ -4,7 +4,6 @@ import com.teka.adapter.chat.out.redis.ChatRedisPublisher;
 import com.teka.adapter.chat.out.translate.GoogleCloudTranslationAdapter;
 import com.teka.application.chat.exception.UserNotInChatRoomException;
 import com.teka.application.chat.port.dto.ChatDto;
-import com.teka.application.chat.port.dto.SenderDto;
 import com.teka.application.chat.port.in.ChatMessageUseCase;
 import com.teka.application.chat.port.in.command.ChatCommand;
 import com.teka.application.chat.port.out.SaveChatPort;
@@ -56,15 +55,7 @@ public class ChatMessageService implements ChatMessageUseCase {
         );
 
         redisPublisher.publish(WebSocketConstant.SUBSCRIBE_ENDPOINT + chatRoomUuid,
-                new ChatDto(
-                        chat.getId().value(),
-                        chat.getChatRoom().getUuid().toString(),
-                        SenderDto.from(chat.getUser()),
-                        chat.getMessage(),
-                        chat.getDetectedLanguage(),
-                        chat.getCreatedAt(),
-                        chat.getUpdatedAt()
-                )
+                ChatDto.from(chat)
         );
     }
 
