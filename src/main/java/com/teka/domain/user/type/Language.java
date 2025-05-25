@@ -14,6 +14,8 @@ public enum Language implements EnumProperty {
     ;
 
     private final String description;
+
+    // https://cloud.google.com/translate/docs/languages?hl=ko
     private final String code;
 
     public static Language fromCode(String code) {

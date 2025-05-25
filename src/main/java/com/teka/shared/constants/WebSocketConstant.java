@@ -5,5 +5,5 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class WebSocketConstant {
 
-    public static final String SUBSCRIBE_ENDPOINT = "/sub/chat/room/";
+    public static final String SUBSCRIBE_ENDPOINT = "/sub/chat/";
 }
