@@ -4,12 +4,14 @@ import com.teka.adapter.chat.in.web.dto.request.ChatRequest;
 import com.teka.adapter.chat.in.web.dto.response.ChatResponse;
 import com.teka.application.auth.port.out.TokenProvider;
 import com.teka.application.auth.service.AuthFacade;
-import com.teka.application.chat.port.in.ChatMessageUseCase;
 import com.teka.application.chat.port.in.ChatSubValidationUseCase;
+import com.teka.application.chat.port.in.ChatUseCase;
 import com.teka.application.chat.port.in.QueryChatUseCase;
+import com.teka.application.chat.port.in.UploadImageUseCase;
 import com.teka.domain.auth.type.Authority;
 import com.teka.domain.user.UserId;
 import com.teka.shared.config.properties.JwtProperties;
+import com.teka.shared.constants.FileConstant;
 import com.teka.shared.response.CommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,10 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,11 +34,12 @@ import java.util.List;
 public class ChatController {
 
     private final ChatSubValidationUseCase chatSubValidationUseCase;
-    private final ChatMessageUseCase chatMessageUseCase;
+    private final ChatUseCase chatUseCase;
     private final QueryChatUseCase queryChatUseCase;
     private final TokenProvider tokenProvider;
     private final AuthFacade authFacade;
     private final JwtProperties jwtProperties;
+    private final UploadImageUseCase uploadImageUseCase;
 
     // TODO
     //  - JWT 인증 방식 간소화 필요(Principal 이용)
@@ -53,12 +59,16 @@ public class ChatController {
 
     @ResponseBody
     @PostMapping("/{chatroom-uuid}")
-    public void chatMessage(
+    public ResponseEntity<Void> chat(
             @AuthenticationPrincipal UserId userId,
             @PathVariable(name = "chatroom-uuid") String chatRoomUuid,
             @RequestBody @Valid ChatRequest request
     ) {
-        chatMessageUseCase.execute(userId, chatRoomUuid, request.toCommand());
+        chatUseCase.execute(userId, chatRoomUuid, request.toCommand());
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
     @ResponseBody
@@ -77,5 +87,17 @@ public class ChatController {
         return ResponseEntity
                 .ok()
                 .body(CommonResponse.ok(responseList));
+    }
+
+    @ResponseBody
+    @PostMapping("/image")
+    public ResponseEntity<Void> uploadImage(
+            @AuthenticationPrincipal UserId ignoredUserId,
+            @RequestPart("image") MultipartFile file
+    ) throws IOException {
+        String filename = uploadImageUseCase.execute(file);
+        return ResponseEntity
+                .created(URI.create(FileConstant.UPLOAD_DIR + filename))
+                .build();
     }
 }
