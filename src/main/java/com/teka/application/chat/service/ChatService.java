@@ -4,7 +4,7 @@ import com.teka.adapter.chat.out.redis.ChatRedisPublisher;
 import com.teka.adapter.chat.out.translate.GoogleCloudTranslationAdapter;
 import com.teka.application.chat.exception.UserNotInChatRoomException;
 import com.teka.application.chat.port.dto.ChatDto;
-import com.teka.application.chat.port.in.ChatMessageUseCase;
+import com.teka.application.chat.port.in.ChatUseCase;
 import com.teka.application.chat.port.in.command.ChatCommand;
 import com.teka.application.chat.port.out.SaveChatPort;
 import com.teka.application.chatroom.exception.ChatRoomNotFoundException;
@@ -24,7 +24,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class ChatMessageService implements ChatMessageUseCase {
+public class ChatService implements ChatUseCase {
 
     private final ChatRedisPublisher redisPublisher;
     private final FindUserPort findUserPort;
