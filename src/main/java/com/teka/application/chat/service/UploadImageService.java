@@ -8,6 +8,7 @@ import com.teka.shared.constants.FileConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,8 +32,7 @@ public class UploadImageService implements UploadImageUseCase {
         validate(file);
         Files.createDirectories(path);
 
-        String filename = Paths.get(Objects.requireNonNull(file.getOriginalFilename())).getFileName().toString();
-        String fullFileName = UUID.randomUUID() + "_" + filename;
+        String fullFileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(file.getOriginalFilename());
 
         Path fullPath = path.resolve(fullFileName);
         Files.write(fullPath, file.getBytes());

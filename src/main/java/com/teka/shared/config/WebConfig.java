@@ -4,6 +4,7 @@ import com.teka.shared.auth.AuthenticationArgumentResolver;
 import com.teka.shared.constants.FileConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -23,9 +24,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "http://localhost:3000",
-                        "http://localhost:3001"
+                        "http://localhost:3001",
+                        "http://localhost:3002"
                 )
-                .allowedMethods("*");
+                .allowedMethods("*")
+                .exposedHeaders(HttpHeaders.LOCATION);
     }
 
     @Override
