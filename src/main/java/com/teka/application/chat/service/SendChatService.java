@@ -2,6 +2,7 @@ package com.teka.application.chat.service;
 
 import com.teka.adapter.chat.out.redis.ChatRedisPublisher;
 import com.teka.adapter.chat.out.translate.GoogleCloudTranslationAdapter;
+import com.teka.application.auth.exception.error.AuthorityMismatchException;
 import com.teka.application.chat.exception.UserNotInChatRoomException;
 import com.teka.application.chat.port.dto.ChatDto;
 import com.teka.application.chat.port.in.SendChatUseCase;
@@ -17,6 +18,7 @@ import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
 import com.teka.domain.user.type.Language;
+import com.teka.domain.user.type.UserType;
 import com.teka.shared.constants.WebSocketConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,6 +68,9 @@ public class SendChatService implements SendChatUseCase {
     }
 
     private void validateUser(User user, ChatRoom chatRoom) {
+        if (!(user.getType() == UserType.USER)) {
+            throw new AuthorityMismatchException();
+        }
         if (!user.getChatRoomId().equals(chatRoom.getId())) {
             throw new UserNotInChatRoomException();
         }
