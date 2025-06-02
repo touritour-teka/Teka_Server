@@ -29,7 +29,7 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 8MB
 
 jwt:
   refresh-expiration-time: 1296000000 # 15일
