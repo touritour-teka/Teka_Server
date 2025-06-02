@@ -1,6 +1,7 @@
 package com.teka.adapter.chat.in.web.dto.response;
 
 import com.teka.application.chat.port.dto.ChatDto;
+import com.teka.domain.chat.type.ChatType;
 import com.teka.domain.user.type.Language;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 public record ChatResponse(
         Long id,
         SenderResponse sender,
+        ChatType type,
         Language detectedLanguage,
         String message,
         Language targetLanguage,
@@ -19,6 +21,7 @@ public record ChatResponse(
         return new ChatResponse(
                 dto.id(),
                 SenderResponse.from(dto.sender()),
+                dto.type(),
                 dto.detectedLanguage(),
                 dto.message(),
                 dto.targetLanguage(),
@@ -32,6 +35,7 @@ public record ChatResponse(
         return new ChatResponse(
                 dto.id(),
                 SenderResponse.from(dto.sender()),
+                dto.type(),
                 dto.detectedLanguage(),
                 dto.message(),
                 targetLanguage,

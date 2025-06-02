@@ -1,10 +1,9 @@
 package com.teka.application.chat.port.in.command;
 
+import com.teka.domain.chat.type.ChatType;
+
 public record ChatCommand(
-        String sender,
+        ChatType type,
         String message
 ) {
-    public ChatCommand(String content) {
-        this(null, content);
-    }
 }

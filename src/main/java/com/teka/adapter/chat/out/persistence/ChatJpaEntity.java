@@ -4,6 +4,7 @@ import com.teka.adapter.chatroom.out.persistence.ChatRoomJpaEntity;
 import com.teka.adapter.user.out.persistence.UserJpaEntity;
 import com.teka.domain.chat.Chat;
 import com.teka.domain.chat.ChatId;
+import com.teka.domain.chat.type.ChatType;
 import com.teka.domain.user.type.Language;
 import com.teka.shared.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -32,6 +33,10 @@ public class ChatJpaEntity extends BaseTimeEntity {
     @JoinColumn(nullable = false, name = "chat_room_id")
     private ChatRoomJpaEntity chatRoom;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private ChatType type;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
@@ -39,11 +44,22 @@ public class ChatJpaEntity extends BaseTimeEntity {
     @Column(length = 30)
     private Language detectedLanguage;
 
-    public ChatJpaEntity(UserJpaEntity user, ChatRoomJpaEntity chatRoom, String message, Language detectedLanguage) {
+    public ChatJpaEntity(UserJpaEntity user, ChatRoomJpaEntity chatRoom, ChatType type, String message, Language detectedLanguage) {
         this.user = user;
         this.chatRoom = chatRoom;
+        this.type = type;
         this.message = message;
         this.detectedLanguage = detectedLanguage;
+    }
+
+    public static ChatJpaEntity from(Chat chat, UserJpaEntity user, ChatRoomJpaEntity chatRoom) {
+        return new ChatJpaEntity(
+                user,
+                chatRoom,
+                chat.getType(),
+                chat.getMessage(),
+                chat.getDetectedLanguage()
+        );
     }
 
     public Chat toDomain() {
@@ -51,6 +67,7 @@ public class ChatJpaEntity extends BaseTimeEntity {
                 new ChatId(id),
                 user.toDomain(),
                 chatRoom.toDomain(),
+                type,
                 message,
                 detectedLanguage,
                 getCreatedAt(),

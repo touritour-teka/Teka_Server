@@ -10,15 +10,16 @@ import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.application.user.exception.UserNotFoundException;
 import com.teka.application.user.port.out.FindUserPort;
 import com.teka.domain.chat.Chat;
+import com.teka.domain.chat.type.ChatType;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Service
@@ -39,16 +40,29 @@ public class QueryChatService implements QueryChatUseCase {
         validateUser(user, chatRoom);
 
         List<Chat> chatList = findChatPort.findChats(chatRoom, cursor, size);
+
+        List<Chat> toTranslate = chatList.stream()
+                .filter(chat -> chat.getType() == ChatType.TEXT && chat.getDetectedLanguage() != user.getLanguage())
+                .toList();
+
         List<String> translatedTextList = googleCloudTranslationAdapter.translateAllTexts(
                 user.getLanguage().getCode(),
-                chatList.stream()
+                toTranslate.stream()
                         .map(Chat::getMessage)
                         .toList()
         );
 
-        return IntStream.range(0, chatList.size())
-                .mapToObj(i -> ChatDto.from(chatList.get(i), user.getLanguage(), translatedTextList.get(i)))
-                .toList();
+        List<ChatDto> result = new ArrayList<>();
+        int index = 0;
+
+        for (Chat chat : chatList) {
+            result.add(toTranslate.contains(chat)
+                    ? ChatDto.from(chat, user.getLanguage(), translatedTextList.get(index++)) :
+                    ChatDto.from(chat)
+            );
+        }
+
+        return result;
     }
 
     private void validateUser(User user, ChatRoom chatRoom) {

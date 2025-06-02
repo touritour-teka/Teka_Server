@@ -5,8 +5,8 @@ import com.teka.adapter.chat.in.web.dto.response.ChatResponse;
 import com.teka.application.auth.port.out.TokenProvider;
 import com.teka.application.auth.service.AuthFacade;
 import com.teka.application.chat.port.in.ChatSubValidationUseCase;
-import com.teka.application.chat.port.in.ChatUseCase;
 import com.teka.application.chat.port.in.QueryChatUseCase;
+import com.teka.application.chat.port.in.SendChatUseCase;
 import com.teka.application.chat.port.in.UploadImageUseCase;
 import com.teka.domain.auth.type.Authority;
 import com.teka.domain.user.UserId;
@@ -34,7 +34,7 @@ import java.util.List;
 public class ChatController {
 
     private final ChatSubValidationUseCase chatSubValidationUseCase;
-    private final ChatUseCase chatUseCase;
+    private final SendChatUseCase sendChatUseCase;
     private final QueryChatUseCase queryChatUseCase;
     private final TokenProvider tokenProvider;
     private final AuthFacade authFacade;
@@ -59,12 +59,12 @@ public class ChatController {
 
     @ResponseBody
     @PostMapping("/{chatroom-uuid}")
-    public ResponseEntity<Void> chat(
+    public ResponseEntity<Void> sendChat(
             @AuthenticationPrincipal UserId userId,
             @PathVariable(name = "chatroom-uuid") String chatRoomUuid,
             @RequestBody @Valid ChatRequest request
     ) {
-        chatUseCase.execute(userId, chatRoomUuid, request.toCommand());
+        sendChatUseCase.execute(userId, chatRoomUuid, request.toCommand());
 
         return ResponseEntity
                 .noContent()

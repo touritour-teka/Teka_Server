@@ -8,6 +8,7 @@ import com.teka.application.chat.port.dto.ChatDto;
 import com.teka.application.chatroom.exception.ChatRoomNotFoundException;
 import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.application.user.port.out.FindUserPort;
+import com.teka.domain.chat.type.ChatType;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.user.type.Language;
 import com.teka.shared.constants.WebSocketConstant;
@@ -42,12 +43,14 @@ public class ChatRedisSubscriber implements MessageListener {
             Set<Language> languageSet = findUserPort.findLanguagesByChatRoomId(chatRoom.getId());
 
             for (Language language : languageSet) {
-                String translatedText = googleCloudTranslationAdapter.translateText(language.getCode(), dto.message());
                 messagingTemplate.convertAndSend(
                         WebSocketConstant.SUBSCRIBE_ENDPOINT + dto.chatRoomUuid() + "/" + language,
-                        ChatResponse.from(dto, language, translatedText)
+                        dto.type() == ChatType.TEXT && dto.detectedLanguage() != language
+                                ? ChatResponse.from(dto, language, googleCloudTranslationAdapter.translateText(language.getCode(), dto.message())) :
+                                ChatResponse.from(dto)
                 );
             }
+
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

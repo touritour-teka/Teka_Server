@@ -31,14 +31,7 @@ public class ChatPersistenceAdapter implements SaveChatPort, FindChatPort {
         ChatRoomJpaEntity chatRoom = chatRoomRepository.findById(chat.getChatRoom().getId().value())
                 .orElseThrow(ChatRoomNotFoundException::new);
 
-        return chatRepository.save(
-                        new ChatJpaEntity(
-                                user,
-                                chatRoom,
-                                chat.getMessage(),
-                                chat.getDetectedLanguage())
-                )
-                .toDomain();
+        return chatRepository.save(ChatJpaEntity.from(chat, user, chatRoom)).toDomain();
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.teka.adapter.chat.out.redis.ChatRedisPublisher;
 import com.teka.adapter.chat.out.translate.GoogleCloudTranslationAdapter;
 import com.teka.application.chat.exception.UserNotInChatRoomException;
 import com.teka.application.chat.port.dto.ChatDto;
-import com.teka.application.chat.port.in.ChatUseCase;
+import com.teka.application.chat.port.in.SendChatUseCase;
 import com.teka.application.chat.port.in.command.ChatCommand;
 import com.teka.application.chat.port.out.SaveChatPort;
 import com.teka.application.chatroom.exception.ChatRoomNotFoundException;
@@ -12,6 +12,7 @@ import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.application.user.exception.UserNotFoundException;
 import com.teka.application.user.port.out.FindUserPort;
 import com.teka.domain.chat.Chat;
+import com.teka.domain.chat.type.ChatType;
 import com.teka.domain.chatroom.ChatRoom;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
@@ -24,7 +25,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class ChatService implements ChatUseCase {
+public class SendChatService implements SendChatUseCase {
 
     private final ChatRedisPublisher redisPublisher;
     private final FindUserPort findUserPort;
@@ -40,15 +41,20 @@ public class ChatService implements ChatUseCase {
                 .orElseThrow(ChatRoomNotFoundException::new);
 
         validateUser(user, chatRoom);
+        Language detectedLanguage = null;
 
-        Language language = googleCloudTranslationAdapter.detectLanguage(command.message());
+        if (command.type() == ChatType.TEXT) {
+            detectedLanguage = googleCloudTranslationAdapter.detectLanguage(command.message());
+        }
+
         Chat chat = saveChatPort.save(
                 new Chat(
                         null,
                         user,
                         chatRoom,
+                        command.type(),
                         command.message(),
-                        language,
+                        detectedLanguage,
                         null,
                         null
                 )
