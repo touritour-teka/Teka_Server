@@ -1,5 +1,6 @@
 package com.teka.application.chat.port.dto;
 
+import com.teka.application.user.port.dto.SimpleUserDto;
 import com.teka.domain.chat.Chat;
 import com.teka.domain.chat.type.ChatType;
 import com.teka.domain.user.type.Language;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 public record ChatDto(
         Long id,
         String chatRoomUuid,
-        SenderDto sender,
+        SimpleUserDto user,
         ChatType type,
         Language detectedLanguage,
         String message,
@@ -22,7 +23,12 @@ public record ChatDto(
         return new ChatDto(
                 chat.getId().value(),
                 chat.getChatRoom().getUuid().toString(),
-                new SenderDto(chat.getUser().getId(), chat.getUser().getUsername()),
+                new SimpleUserDto(
+                        chat.getUser().getId(),
+                        chat.getUser().getUsername(),
+                        chat.getUser().getLanguage(),
+                        chat.getUser().getType()
+                ),
                 chat.getType(),
                 chat.getDetectedLanguage(),
                 chat.getMessage(),
@@ -37,7 +43,12 @@ public record ChatDto(
         return new ChatDto(
                 chat.getId().value(),
                 chat.getChatRoom().getUuid().toString(),
-                new SenderDto(chat.getUser().getId(), chat.getUser().getUsername()),
+                new SimpleUserDto(
+                        chat.getUser().getId(),
+                        chat.getUser().getUsername(),
+                        chat.getUser().getLanguage(),
+                        chat.getUser().getType()
+                ),
                 chat.getType(),
                 chat.getDetectedLanguage(),
                 chat.getMessage(),
