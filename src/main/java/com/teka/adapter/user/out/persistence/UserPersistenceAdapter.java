@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -43,6 +44,11 @@ public class UserPersistenceAdapter implements SaveUserPort, CheckUserPort, Dele
 
         return userRepository.findByPhoneNumberAndChatRoom(phoneNumber.value(), chatRoom)
                 .map(UserJpaEntity::toDomain);
+    }
+
+    @Override
+    public Set<Language> findLanguagesByChatRoomId(ChatRoomId chatRoomId) {
+        return userRepository.findLanguagesByChatRoomId(chatRoomId.value());
     }
 
     @Override

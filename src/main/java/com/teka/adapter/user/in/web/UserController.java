@@ -1,7 +1,7 @@
 package com.teka.adapter.user.in.web;
 
 import com.teka.adapter.user.in.web.dto.request.ChangeLanguageRequest;
-import com.teka.adapter.user.in.web.dto.response.UserInfoResponse;
+import com.teka.adapter.user.in.web.dto.response.UserResponse;
 import com.teka.application.user.port.in.ChangeLanguageUseCase;
 import com.teka.application.user.port.in.UserInfoUseCase;
 import com.teka.domain.user.UserId;
@@ -21,10 +21,10 @@ public class UserController {
     private final UserInfoUseCase userInfoUseCase;
 
     @GetMapping
-    public ResponseEntity<CommonResponse<UserInfoResponse>> getUserInfo(
+    public ResponseEntity<CommonResponse<UserResponse>> getUserInfo(
             @AuthenticationPrincipal UserId userId
     ) {
-        UserInfoResponse response = UserInfoResponse.from(userInfoUseCase.execute(userId));
+        UserResponse response = UserResponse.from(userInfoUseCase.execute(userId));
 
         return ResponseEntity
                 .ok()

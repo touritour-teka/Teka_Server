@@ -5,9 +5,11 @@ import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record ChatRoomSimpleDto(
         ChatRoomId chatRoomId,
+        UUID uuid,
         String name,
         LocalDate startDate,
         LocalDate endDate,
@@ -17,6 +19,7 @@ public record ChatRoomSimpleDto(
     public static ChatRoomSimpleDto from(ChatRoom chatRoom) {
         return new ChatRoomSimpleDto(
                 chatRoom.getId(),
+                chatRoom.getUuid(),
                 chatRoom.getName(),
                 chatRoom.getStartDate(),
                 chatRoom.getEndDate(),

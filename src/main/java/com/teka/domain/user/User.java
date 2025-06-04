@@ -3,11 +3,14 @@ package com.teka.domain.user;
 import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.user.type.Language;
 import com.teka.domain.user.type.UserType;
+import com.teka.shared.domain.AuditableDomain;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
-public class User {
+public class User extends AuditableDomain {
 
     private final UserId id;
 
@@ -24,7 +27,8 @@ public class User {
     private final ChatRoomId chatRoomId;
 
     @Builder
-    public User(UserId id, String username, PhoneNumber phoneNumber, Email email, Language language, UserType type, ChatRoomId chatRoomId) {
+    public User(UserId id, String username, PhoneNumber phoneNumber, Email email, Language language, UserType type, ChatRoomId chatRoomId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(createdAt, updatedAt);
         this.id = id;
         this.username = username;
         this.phoneNumber = phoneNumber;

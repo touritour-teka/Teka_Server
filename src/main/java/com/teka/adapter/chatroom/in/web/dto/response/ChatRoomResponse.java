@@ -6,9 +6,11 @@ import com.teka.domain.chatroom.type.ChatRoomStatus;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public record ChatRoomResponse(
         Long chatRoomId,
+        UUID uuid,
         String name,
         LocalDate startDate,
         LocalDate endDate,
@@ -19,6 +21,7 @@ public record ChatRoomResponse(
     public static ChatRoomResponse from(ChatRoomDto chatRoomDto) {
         return new ChatRoomResponse(
                 chatRoomDto.chatRoomId().value(),
+                chatRoomDto.uuid(),
                 chatRoomDto.name(),
                 chatRoomDto.startDate(),
                 chatRoomDto.endDate(),
