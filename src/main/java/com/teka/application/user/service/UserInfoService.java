@@ -1,7 +1,7 @@
 package com.teka.application.user.service;
 
 import com.teka.application.user.exception.UserNotFoundException;
-import com.teka.application.user.port.dto.UserInfoDto;
+import com.teka.application.user.port.dto.UserDto;
 import com.teka.application.user.port.in.UserInfoUseCase;
 import com.teka.application.user.port.out.FindUserPort;
 import com.teka.domain.user.User;
@@ -16,10 +16,10 @@ public class UserInfoService implements UserInfoUseCase {
     private final FindUserPort findUserPort;
 
     @Override
-    public UserInfoDto execute(UserId userId) {
+    public UserDto execute(UserId userId) {
         User user = findUserPort.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        return UserInfoDto.from(user);
+        return UserDto.from(user);
     }
 }

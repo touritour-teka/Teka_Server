@@ -6,11 +6,13 @@ import com.teka.adapter.chatroom.in.web.dto.request.DeleteUserRequest;
 import com.teka.adapter.chatroom.in.web.dto.request.RegisterUserRequest;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomResponse;
 import com.teka.adapter.chatroom.in.web.dto.response.ChatRoomSimpleResponse;
+import com.teka.adapter.chatroom.in.web.dto.response.MyChatRoomResponse;
 import com.teka.application.chatroom.port.in.*;
 import com.teka.application.chatroom.port.in.command.RegisterUserCommand;
 import com.teka.domain.admin.AdminId;
 import com.teka.domain.chatroom.ChatRoomId;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
+import com.teka.domain.user.UserId;
 import com.teka.shared.response.CommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class ChatRoomController {
     private final DeleteUserUseCase deleteUserUseCase;
     private final ChangeUserTypeUseCase changeUserTypeUseCase;
     private final OpenChatRoomUseCase openChatRoomUseCase;
+    private final QueryMyChatRoomUseCase queryMyChatRoomUseCase;
 
     @PostMapping
     public ResponseEntity<Long> create(
@@ -142,5 +145,14 @@ public class ChatRoomController {
         return ResponseEntity
                 .noContent()
                 .build();
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<CommonResponse<MyChatRoomResponse>> queryMyChatRoom(
+            @AuthenticationPrincipal UserId userId
+    ) {
+        MyChatRoomResponse response = MyChatRoomResponse.from(queryMyChatRoomUseCase.execute(userId));
+        return ResponseEntity
+                .ok(CommonResponse.ok(response));
     }
 }
