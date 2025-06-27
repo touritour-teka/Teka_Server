@@ -42,8 +42,16 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
 
+  servlet:
+    multipart:
+      max-file-size: 8MB
+
 jwt:
   refresh-expiration-time: 1296000000 # 15일
   access-expiration-time: 3600000 # 1시간
   prefix: Bearer
   secret-key: ${JWT_SECRET}
+
+gcp:
+  project-id: ${GCP_PROJECT_ID}
+  credentials: ${GCP_CREDENTIALS}

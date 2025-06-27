@@ -5,7 +5,6 @@ import com.teka.application.admin.port.in.SignUpAdminUseCase;
 import com.teka.application.admin.port.in.ValidateAdminUsernameUseCase;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

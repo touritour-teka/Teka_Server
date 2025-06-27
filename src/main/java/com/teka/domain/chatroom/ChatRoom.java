@@ -5,15 +5,17 @@ import com.teka.domain.chatroom.exception.ChatRoomAdminMismatchException;
 import com.teka.domain.chatroom.exception.OverOperatingPeriodException;
 import com.teka.domain.chatroom.type.ChatRoomStatus;
 import com.teka.domain.user.User;
+import com.teka.shared.domain.AuditableDomain;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
-public class ChatRoom {
+public class ChatRoom extends AuditableDomain {
 
     private final ChatRoomId id;
 
@@ -46,7 +48,8 @@ public class ChatRoom {
     }
 
     @Builder(builderClassName = "ChatRoomBasicBuilder", builderMethodName = "basicBuilder")
-    public ChatRoom(ChatRoomId id, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId) {
+    public ChatRoom(ChatRoomId id, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(createdAt, updatedAt);
         this.id = id;
         this.uuid = UUID.randomUUID();
         this.name = name;
@@ -58,7 +61,8 @@ public class ChatRoom {
     }
 
     @Builder(builderClassName = "ChatRoomFullBuilder", builderMethodName = "fullBuilder")
-    public ChatRoom(ChatRoomId id, UUID uuid, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId, ChatRoomStatus status, List<User> userList) {
+    public ChatRoom(ChatRoomId id, UUID uuid, String name, LocalDate startDate, LocalDate endDate, Long maxParticipants, AdminId adminId, ChatRoomStatus status, List<User> userList, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(createdAt, updatedAt);
         this.id = id;
         this.uuid = uuid;
         this.name = name;
