@@ -5,7 +5,7 @@ import com.teka.application.chatroom.port.in.SendMailUseCase;
 import com.teka.application.chatroom.port.in.command.SendMailCommand;
 import com.teka.application.chatroom.port.out.FindChatRoomPort;
 import com.teka.application.chatroom.port.out.SendMailLinkPort;
-import com.teka.application.user.port.in.exception.UserNotFoundException;
+import com.teka.application.user.exception.UserNotFoundException;
 import com.teka.application.user.port.out.FindUserPort;
 import com.teka.domain.admin.AdminId;
 import com.teka.domain.chatroom.ChatRoom;
