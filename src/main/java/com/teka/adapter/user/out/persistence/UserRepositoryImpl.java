@@ -21,7 +21,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return new HashSet<>(queryFactory
                 .select(userJpaEntity.language)
                 .from(userJpaEntity)
-                .where(userJpaEntity.chatRoom.id.eq(chatRoomId))
+                .where(
+                        userJpaEntity.chatRoom.id.eq(chatRoomId),
+                        userJpaEntity.language.isNotNull()
+                )
                 .distinct()
                 .fetch());
     }
