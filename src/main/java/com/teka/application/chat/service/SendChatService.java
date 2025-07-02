@@ -15,6 +15,7 @@ import com.teka.application.user.port.out.FindUserPort;
 import com.teka.domain.chat.Chat;
 import com.teka.domain.chat.type.ChatType;
 import com.teka.domain.chatroom.ChatRoom;
+import com.teka.domain.chatroom.type.ChatRoomStatus;
 import com.teka.domain.user.User;
 import com.teka.domain.user.UserId;
 import com.teka.domain.user.type.Language;
@@ -68,6 +69,9 @@ public class SendChatService implements SendChatUseCase {
     }
 
     private void validateUser(User user, ChatRoom chatRoom) {
+        if (chatRoom.getStatus() == ChatRoomStatus.CLOSED && user.getType() != UserType.OBSERVER) {
+            throw new AuthorityMismatchException();
+        }
         if (!(user.getType() == UserType.USER)) {
             throw new AuthorityMismatchException();
         }

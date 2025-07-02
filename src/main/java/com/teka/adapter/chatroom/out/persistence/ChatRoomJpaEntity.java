@@ -51,7 +51,7 @@ public class ChatRoomJpaEntity extends BaseTimeEntity {
     @JoinColumn(nullable = false, name="admin_id")
     private AdminJpaEntity admin;
 
-    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final List<UserJpaEntity> userList = new ArrayList<>();
 
     @Builder

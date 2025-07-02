@@ -26,7 +26,9 @@ public class ChatJpaEntity extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "user_id")
+    @JoinColumn(nullable = false, name = "user_id",
+            foreignKey = @ForeignKey(name = "fk_chat_user", foreignKeyDefinition = "FOREIGN KEY (user_id) REFERENCES tbl_user(user_id) ON DELETE CASCADE"))
+
     private UserJpaEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
